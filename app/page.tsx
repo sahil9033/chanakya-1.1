@@ -10,37 +10,40 @@ interface Message {
 
 const STRATEGIC_PROMPTS = [
   {
+    tag: 'Leadership',
     icon: '👑',
-    category: 'Statecraft & Leadership',
-    prompt: 'What are the essential qualities of a leader who commands absolute respect and loyalty?',
+    title: 'The Unshakeable Leader',
+    prompt: 'What are the essential qualities of a leader who commands absolute respect and loyalty in times of crisis?',
   },
   {
+    tag: 'Tactics',
     icon: '⚔️',
-    category: 'Asymmetric Warfare',
-    prompt: 'How can an underdog defeat a competitor who possesses vastly superior resources?',
+    title: 'Asymmetric Advantage',
+    prompt: 'How can an underdog defeat or outmaneuver an adversary who commands vastly superior resources?',
   },
   {
+    tag: 'Diplomacy',
     icon: '🛡️',
-    category: 'The 4 Upayas (Tactics)',
-    prompt: 'Explain the strategic application of Sama (conciliation), Dama (concession), Bheda (division), and Danda (force).',
+    title: 'The Four Upayas',
+    prompt: 'Explain how to apply the 4 Upayas (Sama, Dama, Bheda, and Danda) in modern high-stakes negotiations.',
   },
   {
+    tag: 'Statecraft',
     icon: '⚖️',
-    category: 'Discernment & Trust',
-    prompt: 'How does the Arthashastra recommend testing the loyalty and hidden motives of associates?',
+    title: 'Testing Motives',
+    prompt: 'How does the Arthashastra recommend discerning the true motives and testing loyalty of close associates?',
   },
 ]
 
 function FormattedContent({ content }: { content: string }) {
-  // Simple, safe parser for paragraphs, bold, lists, and quotes
   const lines = content.split('\n')
-  
+
   return (
-    <div className="space-y-2 text-slate-200 leading-relaxed text-[15px]">
+    <div className="space-y-2.5 text-[#1E2033] leading-relaxed text-[15px]">
       {lines.map((line, idx) => {
         const trimmed = line.trim()
         if (!trimmed) {
-          return <div key={idx} className="h-1" />
+          return <div key={idx} className="h-1.5" />
         }
 
         // Blockquotes
@@ -48,7 +51,7 @@ function FormattedContent({ content }: { content: string }) {
           return (
             <blockquote
               key={idx}
-              className="border-l-2 border-amber-400/70 pl-3 py-1 my-1 italic text-amber-200/90 bg-amber-500/5 rounded-r"
+              className="border-l-2 border-[#D5650F] pl-3.5 py-2 my-2 italic text-[#585C7B] bg-[#FFF8F3] rounded-r-lg"
             >
               {trimmed.replace(/^>\s*/, '')}
             </blockquote>
@@ -59,22 +62,22 @@ function FormattedContent({ content }: { content: string }) {
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
           const bulletText = trimmed.substring(2)
           return (
-            <div key={idx} className="flex items-start gap-2 ml-1">
-              <span className="text-amber-400 mt-1.5 text-xs">◆</span>
-              <span>{renderBold(bulletText)}</span>
+            <div key={idx} className="flex items-start gap-2.5 ml-1">
+              <span className="text-[#D5650F] mt-1.5 text-[10px]">✦</span>
+              <span className="text-[#2C3048]">{renderBold(bulletText)}</span>
             </div>
           )
         }
 
-        // Numbered lists (e.g. 1. or 2.)
+        // Numbered lists
         const matchNumber = trimmed.match(/^(\d+)\.\s+(.*)/)
         if (matchNumber) {
           return (
-            <div key={idx} className="flex items-start gap-2 ml-1">
-              <span className="text-amber-400 font-semibold text-xs mt-1 w-4 text-right">
+            <div key={idx} className="flex items-start gap-2.5 ml-1">
+              <span className="text-[#D5650F] font-semibold text-xs mt-1 w-4 text-right">
                 {matchNumber[1]}.
               </span>
-              <span>{renderBold(matchNumber[2])}</span>
+              <span className="text-[#2C3048]">{renderBold(matchNumber[2])}</span>
             </div>
           )
         }
@@ -90,7 +93,7 @@ function renderBold(text: string) {
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       return (
-        <strong key={i} className="font-semibold text-amber-200">
+        <strong key={i} className="font-semibold text-[#1E2033]">
           {part.slice(2, -2)}
         </strong>
       )
@@ -115,7 +118,7 @@ export default function Page() {
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 160)}px`
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 140)}px`
     }
   }, [input])
 
@@ -180,111 +183,145 @@ export default function Page() {
   }
 
   function clearChat() {
-    if (confirm('Start a new counsel session? Current messages will be cleared.')) {
+    if (confirm('Start a new session? Current conversation will be cleared.')) {
       setMessages([])
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b0f17] text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
-      {/* Background radial gold aura */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-gradient-to-b from-amber-500/10 via-amber-900/5 to-transparent blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[350px] bg-blue-900/10 blur-[140px] rounded-full" />
+    <div className="min-h-screen flex flex-col bg-white text-[#1E2033] relative">
+      {/* Top Ambient Mesh Gradient (Sarvam Signature) */}
+      <div className="sarvam-hero-mesh fixed inset-0 pointer-events-none z-0" />
+
+      {/* Top Announcement Bar */}
+      <div className="relative z-30 bg-[#F7F7F8] border-b border-[#E6E6E6] px-4 py-2 text-center text-xs text-[#585C7B] flex items-center justify-center gap-2">
+        <span className="text-[#D5650F] text-[11px]">✦</span>
+        <span>
+          Grounded in the <strong className="font-medium text-[#1E2033]">Arthashastra</strong> · Powered by frontier NVIDIA NIM reasoning models
+        </span>
+        <span className="text-[#D5650F] text-[11px]">✦</span>
       </div>
 
-      {/* Regal Navbar */}
-      <header className="sticky top-0 z-30 border-b border-amber-500/15 bg-[#0b0f17]/85 backdrop-blur-md px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-3.5">
-          {/* Emblem Seal */}
-          <div className="relative group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-600 to-amber-800 p-[1px] shadow-lg shadow-amber-500/20">
-              <div className="w-full h-full bg-[#0d1424] rounded-[11px] flex items-center justify-center">
-                <span className="text-amber-400 font-bold text-base tracking-tight select-none">
-                  चा
-                </span>
-              </div>
-            </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#0b0f17] rounded-full" />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold tracking-tight bg-gradient-to-r from-amber-100 via-amber-300 to-amber-500 bg-clip-text text-transparent">
-                Chanakya AI
-              </h1>
-              <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300">
-                Arthashastra
-              </span>
-            </div>
-            <p className="text-xs text-slate-400">
-              Strategic counsel · Royal advisory wisdom
-            </p>
+      {/* Sarvam-style Sticky Navigation Bar */}
+      <header className="sticky top-0 z-30 border-b border-[#E6E6E6] bg-white/80 backdrop-blur-md px-4 sm:px-8 py-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {/* Brand Wordmark & Terracotta Dot */}
+          <div className="flex items-center gap-1.5 cursor-pointer" onClick={() => setMessages([])}>
+            <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#1E2033]">
+              chanakya
+            </span>
+            <span className="w-2 h-2 rounded-full bg-[#D5650F] inline-block -mt-1.5" />
+            <span className="ml-2 hidden sm:inline-block text-[11px] font-medium tracking-wide text-[#585C7B] uppercase bg-[#F0F1F5] px-2.5 py-0.5 rounded-full border border-[rgba(30,32,51,0.06)]">
+              AI 1.1
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2.5">
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/60 border border-slate-800 text-xs text-slate-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            NVIDIA NIM
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F1F5] text-xs text-[#585C7B] font-medium border border-[rgba(30,32,51,0.06)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            NVIDIA NIM Live
           </div>
 
           {messages.length > 0 && (
             <button
               onClick={clearChat}
-              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-amber-300 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-amber-500/30 bg-slate-900/40 transition-colors"
-              title="Reset conversation"
+              className="rounded-full bg-white hover:bg-[#F7F7F8] text-[#1E2033] border border-[#E6E6E6] px-3.5 py-1.5 text-xs font-medium shadow-sm transition-colors flex items-center gap-1.5"
             >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3.5 h-3.5 text-[#585C7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              <span className="hidden sm:inline">New Session</span>
+              <span>New Session</span>
             </button>
           )}
+
+          <a
+            href="https://build.nvidia.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-[#1E2033] hover:bg-[#2A2E47] text-white px-4 py-1.5 text-xs font-medium shadow-sm transition-all flex items-center gap-1"
+          >
+            <span>Platform</span>
+            <svg className="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
         </div>
       </header>
 
-      {/* Main Chat Stream */}
-      <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-6 z-10 pb-32">
+      {/* Main Container */}
+      <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-6 z-10 pb-36">
         {messages.length === 0 ? (
-          /* Empty State / Welcome Screen */
+          /* Sarvam AI Style Hero Section */
           <div className="py-8 sm:py-14 flex flex-col items-center text-center animate-fadeIn">
-            {/* Crest Emblem */}
-            <div className="relative mb-6">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-600 to-amber-900 p-0.5 shadow-2xl shadow-amber-500/25">
-                <div className="w-full h-full bg-[#0d1424] rounded-[15px] flex items-center justify-center">
-                  <svg className="w-10 h-10 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="absolute -inset-2 bg-amber-500/20 rounded-3xl blur-xl -z-10 animate-pulse-glow" />
+            {/* Cultural Archway Flourish SVG */}
+            <div className="mb-4 text-[#D5650F] opacity-90">
+              <svg width="48" height="24" viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 0C24 6.627 18.627 12 12 12C18.627 12 24 17.373 24 24C24 17.373 29.373 12 36 12C29.373 12 24 6.627 24 0Z" fill="currentColor" fillOpacity="0.85"/>
+                <circle cx="2" cy="12" r="2" fill="currentColor"/>
+                <circle cx="46" cy="12" r="2" fill="currentColor"/>
+              </svg>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent">
-              Seek the Counsel of Chanakya
-            </h2>
-            <p className="max-w-lg text-slate-400 text-sm sm:text-base mt-2.5 leading-relaxed">
-              &ldquo;Before embarking on an endeavor, ask: <span className="text-amber-200 font-medium">Why am I doing this? What may the results be? Will I succeed?</span> Only with clear insight, proceed.&rdquo;
+            {/* Eyebrow Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F0F1F5] border border-[rgba(30,32,51,0.08)] text-xs font-medium text-[#1E2033] mb-4 shadow-sm">
+              <span className="text-[#D5650F]">✦</span>
+              <span>Ancient Strategic Intelligence · Arthashastra</span>
+            </div>
+
+            {/* Editorial Headline (Sarvam style) */}
+            <h1 className="text-3xl sm:text-5xl font-serif font-normal tracking-tight text-[#1E2033] max-w-2xl leading-[1.15]">
+              Strategic counsel for leaders from India
+            </h1>
+
+            {/* Sub-tagline */}
+            <p className="max-w-xl text-[#585C7B] text-base sm:text-lg mt-3.5 leading-relaxed font-normal">
+              Grounded in political realism, diplomacy, and timeless statecraft. Formulate your strategy with Chanakya.
             </p>
 
-            {/* Prompt Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-10 text-left">
+            {/* Quick Action Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+              <button
+                onClick={() => handleSend(STRATEGIC_PROMPTS[0].prompt)}
+                className="rounded-full bg-[#1E2033] hover:bg-[#2A2E47] text-white px-5 py-2.5 text-xs sm:text-sm font-medium shadow-sm transition-all"
+              >
+                Seek Leadership Counsel
+              </button>
+              <button
+                onClick={() => handleSend(STRATEGIC_PROMPTS[2].prompt)}
+                className="rounded-full bg-white hover:bg-[#F7F7F8] text-[#1E2033] border border-[#E6E6E6] px-5 py-2.5 text-xs sm:text-sm font-medium shadow-sm transition-all"
+              >
+                Explore 4 Upayas (Tactics)
+              </button>
+            </div>
+
+            {/* Bento Grid - 4 Strategic Questions */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full mt-12 text-left">
               {STRATEGIC_PROMPTS.map((item, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSend(item.prompt)}
-                  className="group p-4 rounded-xl border border-slate-800/80 hover:border-amber-500/40 bg-slate-900/40 hover:bg-slate-900/90 transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-amber-500/10 flex flex-col justify-between"
+                  className="group p-5 rounded-2xl border border-[#E6E6E6] bg-white hover:border-[#D5650F]/50 hover:shadow-md transition-all duration-200 text-left flex flex-col justify-between shadow-[0_2px_8px_rgba(30,32,51,0.03)]"
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">{item.icon}</span>
-                    <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
-                      {item.category}
-                    </span>
+                  <div>
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-xs font-medium tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-[#F7F7F8] text-[#585C7B] group-hover:text-[#D5650F] group-hover:bg-[#FFF8F3] transition-colors border border-[rgba(30,32,51,0.06)]">
+                        {item.tag}
+                      </span>
+                      <span className="text-base">{item.icon}</span>
+                    </div>
+                    <h3 className="font-serif text-base font-medium text-[#1E2033] group-hover:text-[#D5650F] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#585C7B] mt-1.5 leading-relaxed">
+                      {item.prompt}
+                    </p>
                   </div>
-                  <p className="text-sm text-slate-300 group-hover:text-amber-100 transition-colors leading-snug">
-                    {item.prompt}
-                  </p>
+
+                  <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-[#D5650F] opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Ask Chanakya</span>
+                    <span>→</span>
+                  </div>
                 </button>
               ))}
             </div>
@@ -298,31 +335,31 @@ export default function Page() {
                 m.role === 'user' ? 'items-end' : 'items-start'
               } animate-fadeIn`}
             >
-              {/* Role Header */}
-              <div className="flex items-center gap-2 mb-1.5 px-1 text-xs text-slate-400">
+              {/* Header Label */}
+              <div className="flex items-center gap-2 mb-1.5 px-2 text-xs text-[#585C7B]">
                 {m.role === 'assistant' ? (
                   <>
-                    <div className="w-5 h-5 rounded-md bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-[10px] text-amber-300 font-bold">
+                    <div className="w-5 h-5 rounded-full bg-[#D5650F] text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
                       चा
                     </div>
-                    <span className="font-semibold text-amber-300">Chanakya</span>
-                    <span className="text-slate-500">· Counselor</span>
+                    <span className="font-semibold text-[#1E2033]">Chanakya</span>
+                    <span className="text-[#8F92A9]">· Royal Counselor</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-medium text-slate-300">You</span>
-                    <span className="text-slate-500">· Seeker</span>
+                    <span className="font-medium text-[#585C7B]">You</span>
+                    <span className="text-[#8F92A9]">· Inquirer</span>
                   </>
                 )}
-                {m.timestamp && <span className="text-slate-500 text-[11px]">• {m.timestamp}</span>}
+                {m.timestamp && <span className="text-[#A6A8BC] text-[11px]">· {m.timestamp}</span>}
               </div>
 
               {/* Message Bubble */}
               <div
-                className={`relative group max-w-[90%] sm:max-w-[85%] rounded-2xl px-5 py-4 shadow-md ${
+                className={`max-w-[90%] sm:max-w-[85%] rounded-3xl px-5 sm:px-6 py-4 shadow-sm ${
                   m.role === 'user'
-                    ? 'bg-gradient-to-r from-amber-600/25 to-amber-700/30 border border-amber-500/35 text-slate-100 rounded-tr-sm'
-                    : 'bg-[#0f172a]/90 border border-slate-800 text-slate-200 rounded-tl-sm backdrop-blur-sm'
+                    ? 'bg-[#1E2033] text-white rounded-tr-sm'
+                    : 'bg-white border border-[#E6E6E6] text-[#1E2033] rounded-tl-sm shadow-[0_2px_12px_rgba(30,32,51,0.04)]'
                 }`}
               >
                 {m.role === 'assistant' ? (
@@ -331,30 +368,30 @@ export default function Page() {
                   <p className="whitespace-pre-wrap leading-relaxed text-[15px]">{m.content}</p>
                 )}
 
-                {/* Copy button for assistant responses */}
+                {/* Footer copy action for assistant replies */}
                 {m.role === 'assistant' && (
-                  <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-                    <span className="text-[11px] text-slate-500 font-serif italic">
-                      Arthashastra Counsel
+                  <div className="mt-4 pt-2.5 border-t border-[#F0F1F5] flex items-center justify-between text-xs text-[#8F92A9]">
+                    <span className="text-[11px] text-[#A6A8BC]">
+                      Arthashastra Intelligence
                     </span>
                     <button
                       onClick={() => copyToClipboard(m.content, i)}
-                      className="hover:text-amber-300 flex items-center gap-1 transition-colors px-2 py-0.5 rounded hover:bg-slate-800/60"
-                      title="Copy counsel"
+                      className="hover:text-[#1E2033] flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-full bg-[#F7F7F8] hover:bg-[#F0F1F5] border border-[rgba(30,32,51,0.06)]"
+                      title="Copy response"
                     >
                       {copiedIdx === i ? (
                         <>
-                          <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
-                          <span className="text-emerald-400">Copied</span>
+                          <span className="text-emerald-700 font-medium">Copied</span>
                         </>
                       ) : (
                         <>
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="w-3.5 h-3.5 text-[#585C7B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                           </svg>
-                          <span>Copy</span>
+                          <span className="text-[#585C7B]">Copy</span>
                         </>
                       )}
                     </button>
@@ -365,24 +402,24 @@ export default function Page() {
           ))
         )}
 
-        {/* Loading / Thinking State */}
+        {/* Thinking Deliberation State */}
         {loading && (
           <div className="flex flex-col items-start animate-fadeIn">
-            <div className="flex items-center gap-2 mb-1.5 px-1 text-xs text-slate-400">
-              <div className="w-5 h-5 rounded-md bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-[10px] text-amber-300 font-bold">
+            <div className="flex items-center gap-2 mb-1.5 px-2 text-xs text-[#585C7B]">
+              <div className="w-5 h-5 rounded-full bg-[#D5650F] text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
                 चा
               </div>
-              <span className="font-semibold text-amber-300">Chanakya</span>
-              <span className="text-slate-500">is deliberating...</span>
+              <span className="font-semibold text-[#1E2033]">Chanakya</span>
+              <span className="text-[#8F92A9]">is formulating strategy...</span>
             </div>
-            <div className="px-5 py-4 rounded-2xl bg-[#0f172a]/80 border border-amber-500/20 rounded-tl-sm flex items-center gap-3 shadow-lg shadow-amber-500/5">
+            <div className="px-5 py-4 rounded-3xl bg-white border border-[#E6E6E6] rounded-tl-sm flex items-center gap-3 shadow-[0_2px_12px_rgba(30,32,51,0.04)]">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse delay-100" />
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse delay-200" />
+                <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-bounce" />
+                <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-bounce [animation-delay:0.15s]" />
+                <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-bounce [animation-delay:0.3s]" />
               </div>
-              <span className="text-sm text-amber-200/80 font-serif italic">
-                Formulating strategic counsel from the Arthashastra...
+              <span className="text-sm text-[#585C7B] font-serif italic">
+                Deliberating ancient principles from the Arthashastra...
               </span>
             </div>
           </div>
@@ -391,11 +428,11 @@ export default function Page() {
         <div ref={endRef} />
       </main>
 
-      {/* Floating Glassmorphic Input Dock */}
-      <footer className="fixed bottom-0 left-0 right-0 z-30 p-4 sm:p-6 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/95 to-transparent pointer-events-none">
+      {/* Sarvam Floating Pill Input Bar */}
+      <footer className="fixed bottom-0 left-0 right-0 z-30 p-4 sm:p-6 bg-gradient-to-t from-white via-white/95 to-transparent pointer-events-none">
         <div className="max-w-3xl mx-auto w-full pointer-events-auto">
-          <div className="relative rounded-2xl bg-[#0f172a]/90 backdrop-blur-xl border border-amber-500/20 shadow-2xl shadow-black/80 p-2 sm:p-2.5 transition-all focus-within:border-amber-500/50 focus-within:ring-2 focus-within:ring-amber-500/20">
-            <div className="flex items-end gap-2">
+          <div className="relative rounded-3xl bg-white/90 backdrop-blur-xl border border-[#E6E6E6] shadow-[0_12px_36px_rgba(30,32,51,0.09)] p-2 sm:p-2.5 transition-all focus-within:border-[#D5650F]/50 focus-within:ring-2 focus-within:ring-[#D5650F]/15">
+            <div className="flex items-end gap-2 px-1">
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -406,27 +443,27 @@ export default function Page() {
                     handleSend()
                   }
                 }}
-                placeholder="Ask Chanakya for strategic counsel... (e.g., negotiation, leadership, conflict)"
+                placeholder="Ask Chanakya for counsel... (e.g., negotiation, conflict, leadership)"
                 disabled={loading}
                 rows={1}
-                className="flex-1 bg-transparent border-0 resize-none px-3 py-2 text-sm sm:text-base text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-0 max-h-36 leading-normal"
+                className="flex-1 bg-transparent border-0 resize-none px-3 py-2 text-sm sm:text-base text-[#1E2033] placeholder-[#8F92A9] focus:outline-none focus:ring-0 max-h-32 leading-normal"
               />
 
               <button
                 onClick={() => handleSend()}
                 disabled={loading || !input.trim()}
-                className="flex-shrink-0 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-slate-950 font-semibold text-sm shadow-md shadow-amber-500/25 transition-all duration-200 disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1.5"
+                className="flex-shrink-0 px-5 py-2.5 rounded-full bg-[#1E2033] hover:bg-[#2A2E47] text-white font-medium text-xs sm:text-sm shadow-sm transition-all duration-200 disabled:opacity-25 disabled:pointer-events-none flex items-center gap-1.5"
               >
-                <span>Counsel</span>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <span>Seek Counsel</span>
+                <svg className="w-3.5 h-3.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </button>
             </div>
 
-            <div className="mt-1 px-3 pb-0.5 flex items-center justify-between text-[11px] text-slate-500">
-              <span>Press <kbd className="font-mono bg-slate-800/80 px-1 py-0.5 rounded text-slate-400">Enter ↵</kbd> to seek counsel · <kbd className="font-mono bg-slate-800/80 px-1 py-0.5 rounded text-slate-400">Shift + Enter</kbd> for newline</span>
-              <span className="hidden sm:inline">Chanakya AI v1.1</span>
+            <div className="mt-1 px-3 pb-0.5 flex items-center justify-between text-[11px] text-[#8F92A9]">
+              <span>Press <kbd className="font-mono bg-[#F0F1F5] text-[#585C7B] px-1 py-0.5 rounded text-[10px]">Enter ↵</kbd> to ask · <kbd className="font-mono bg-[#F0F1F5] text-[#585C7B] px-1 py-0.5 rounded text-[10px]">Shift + Enter</kbd> for line</span>
+              <span className="hidden sm:inline">Built on sovereign intelligence</span>
             </div>
           </div>
         </div>
