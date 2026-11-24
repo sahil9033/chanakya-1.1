@@ -1,122 +1,184 @@
 import Link from 'next/link'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import Reveal from '../components/Reveal'
+import {
+  Chakra,
+  IconArrowRight,
+  IconBook,
+  IconBolt,
+  IconCompass,
+  IconScale,
+  IconTarget,
+} from '../components/Icons'
 
-const PHILOSOPHICAL_PILLARS = [
+const PILLARS = [
   {
-    sanskrit: 'विवेक (Viveka)',
-    concept: 'Discernment: Sifting Gold from Dross',
-    source: 'Katha & Mandukya Upanishads',
-    desc: 'The faculty of piercing through surface deception (Maya) to see the unvarnished reality. A strategist without Viveka reacts to illusions; a master with Viveka strikes at the root.',
-    maxim: '“The wise choose the good (Shreya), while the undisciplined choose only the pleasant (Preya).”',
+    sanskrit: 'विवेक',
+    roman: 'Viveka',
+    concept: 'Discernment — sifting gold from dross',
+    source: 'Katha & Māṇḍūkya Upaniṣads',
+    Icon: IconCompass,
+    desc: 'The faculty of piercing through surface deception to see unvarnished reality. A strategist without Viveka reacts to illusions; a master strikes at the root.',
+    maxim:
+      'The wise choose the good (Śreya), while the undisciplined choose only the pleasant (Preya).',
   },
   {
-    sanskrit: 'निःकाम कर्म (Nishkama Karma)',
-    concept: 'Action Without Emotional Fever',
-    source: 'Isha Upanishad & Bhagavad Gita',
-    desc: 'Executing duty with supreme precision while remaining detached from anxiety regarding the outcome. Fear of defeat paralyzes execution; detachment breeds effortless mastery.',
-    maxim: '“Perform your duty with an even mind, unattached to victory or defeat. Equanimity is true yoga.”',
+    sanskrit: 'निःकाम कर्म',
+    roman: 'Niṣkāma Karma',
+    concept: 'Action without emotional fever',
+    source: 'Īśa Upaniṣad & Bhagavad Gītā',
+    Icon: IconTarget,
+    desc: 'Executing duty with supreme precision while remaining detached from anxiety over the outcome. Fear of defeat paralyses execution; detachment breeds effortless mastery.',
+    maxim:
+      'Perform your duty with an even mind, unattached to victory or defeat. Equanimity is true yoga.',
   },
   {
-    sanskrit: 'सत्य & धर्म (Satya & Dharma)',
-    concept: 'The Cosmic Axis of Sustainable Power',
-    source: 'Brihadaranyaka Upanishad',
-    desc: 'In Chanakya’s synthesis, power devoid of Dharma collapses under its own rot. The ruler uses harsh expedients only to preserve the righteous order of the cosmos and the welfare of the people.',
-    maxim: '“Dharma protects those who protect it. An unjust empire falls from within before external foes arrive.”',
+    sanskrit: 'सत्य & धर्म',
+    roman: 'Satya & Dharma',
+    concept: 'The cosmic axis of sustainable power',
+    source: 'Bṛhadāraṇyaka Upaniṣad',
+    Icon: IconScale,
+    desc: 'Power devoid of Dharma collapses under its own rot. The ruler uses harsh expedients only to preserve the righteous order of the cosmos and the welfare of the people.',
+    maxim:
+      'Dharma protects those who protect it. An unjust empire falls from within before external foes arrive.',
   },
   {
-    sanskrit: 'चाणक्य नीति (Chanakya Niti)',
-    concept: 'Cold Realism in Human Dynamics',
-    source: 'Chanakya Niti Darpana',
-    desc: 'Human beings are driven by fear, greed, pride, and loyalty. Test men in calamity, servants in duty, and friends in adversity. Never trust an unverified oath.',
-    maxim: '“A snake is dangerous even if not venomous; it must raise its hood. A leader must maintain unshakeable deterrence.”',
+    sanskrit: 'चाणक्य नीति',
+    roman: 'Chāṇakya Nīti',
+    concept: 'Cold realism in human dynamics',
+    source: 'Chāṇakya Nīti Darpaṇa',
+    Icon: IconBook,
+    desc: 'Human beings are driven by fear, greed, pride and loyalty. Test men in calamity, servants in duty, friends in adversity. Never trust an unverified oath.',
+    maxim:
+      'A snake is dangerous even if not venomous; it must raise its hood. A leader must maintain unshakeable deterrence.',
   },
 ]
 
 export default function PhilosophyPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#1E2033]">
+    <div className="relative flex min-h-screen flex-col bg-canvas text-ink">
       <Navbar />
 
-      <section className="sarvam-hero-mesh py-16 sm:py-20 px-4 text-center border-b border-[#E6E6E6]">
-        <div className="max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F0F1F5] text-xs font-medium text-[#D5650F] border border-[rgba(30,32,51,0.08)]">
-            <span>✦</span>
-            <span>The Vedic Bedrock</span>
-          </div>
+      {/* Hero */}
+      <section className="relative isolate overflow-hidden border-b border-ink-line">
+        <div className="mesh" aria-hidden="true">
+          <span className="mesh-layer mesh-a" />
+          <span className="mesh-layer mesh-c" />
+        </div>
+        <div className="relative mx-auto max-w-3xl px-4 py-20 text-center sm:py-28">
+          <Reveal className="flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              The Vedic bedrock
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.04] tracking-tightest text-ink sm:text-6xl">
+              The philosophy of Chanakya &amp; the Upaniṣads
+            </h1>
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
+              Where realpolitik meets the transcendental detachment of the Upaniṣads. True
+              sovereignty is not brute force — it is internal mastery translated into external
+              statecraft.
+            </p>
+          </Reveal>
+          <Reveal delay={200}>
+            <div className="mt-9 flex justify-center">
+              <Link
+                href="/chat?filter=upanishad"
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-lift"
+              >
+                <IconBolt width={16} height={16} className="text-accent" />
+                Consult with the Upaniṣadic filter
+                <IconArrowRight
+                  width={16}
+                  height={16}
+                  className="transition-transform duration-300 ease-expo group-hover:translate-x-1"
+                />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-          <h1 className="text-3xl sm:text-5xl font-serif text-[#1E2033] tracking-tight">
-            The Philosophy of Chanakya & The Upanishads
-          </h1>
+      {/* Pillars */}
+      <section className="py-24">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="space-y-5">
+            {PILLARS.map((p, i) => (
+              <Reveal key={p.roman} delay={(i % 2) * 60}>
+                <article className="spot group grid gap-8 rounded-3xl border border-ink-line bg-canvas p-7 transition-all duration-500 ease-expo hover:border-accent/25 hover:shadow-lift sm:p-10 md:grid-cols-[1fr_1.4fr]">
+                  <div className="relative">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-ink-line bg-cream text-ink transition-colors duration-500 group-hover:border-accent/30 group-hover:text-accent-deep">
+                        <p.Icon width={20} height={20} />
+                      </span>
+                      <span className="font-mono text-[11px] tabular-nums text-ink-faint">
+                        Principle {String(i + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <div className="mt-6 font-serif text-3xl leading-none tracking-tight text-ink sm:text-4xl">
+                      {p.sanskrit}
+                    </div>
+                    <div className="mt-2 text-sm font-medium uppercase tracking-[0.14em] text-accent-deep">
+                      {p.roman}
+                    </div>
+                    <div className="mt-1 text-xs text-ink-faint">{p.source}</div>
+                  </div>
 
-          <p className="text-base sm:text-lg text-[#585C7B] leading-relaxed">
-            Where Machiavellian realism meets the transcendental detachment of the Upanishads. True sovereignty is not brute force—it is internal mastery translated into external statecraft.
-          </p>
-
-          <div className="pt-2">
-            <Link
-              href="/chat?filter=upanishad"
-              className="inline-flex items-center gap-2 rounded-full bg-[#1E2033] hover:bg-[#2A2E47] text-white px-6 py-2.5 text-sm font-medium shadow-sm transition-all"
-            >
-              <span>Consult with Upanishadic Filter</span>
-              <span className="text-[#D5650F]">✦</span>
-            </Link>
+                  <div className="relative">
+                    <h3 className="text-lg font-semibold tracking-tight text-ink">{p.concept}</h3>
+                    <p className="mt-3 text-pretty text-[15px] leading-relaxed text-ink-soft">
+                      {p.desc}
+                    </p>
+                    <blockquote className="mt-5 rounded-r-xl border-l-2 border-accent bg-cream py-3 pl-4 pr-3 font-serif text-[15px] italic leading-relaxed text-ink-soft">
+                      {p.maxim}
+                    </blockquote>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Main Philosophical Exposition */}
-      <section className="py-16 px-4 sm:px-8 max-w-5xl mx-auto w-full">
-        <div className="space-y-8">
-          {PHILOSOPHICAL_PILLARS.map((p, idx) => (
-            <div
-              key={idx}
-              className="p-6 sm:p-8 rounded-2xl border border-[#E6E6E6] bg-white shadow-xs hover:border-[#D5650F]/30 hover:shadow-md transition-all"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span className="text-xs font-mono font-semibold uppercase text-[#D5650F] bg-[#FFF8F3] px-3 py-1 rounded-full border border-[#D5650F]/20">
-                  {p.source}
-                </span>
-                <span className="text-xs text-[#8F92A9]">Principle 0{idx + 1}</span>
-              </div>
-
-              <h2 className="font-serif text-2xl font-bold text-[#1E2033]">
-                {p.sanskrit}
-              </h2>
-              <h3 className="text-sm font-semibold text-[#585C7B] mt-0.5 mb-3">
-                {p.concept}
-              </h3>
-
-              <p className="text-sm text-[#2C3048] leading-relaxed mb-4">
-                {p.desc}
-              </p>
-
-              <blockquote className="border-l-2 border-[#D5650F] pl-4 py-2 italic text-sm text-[#585C7B] bg-[#F7F7F8] rounded-r-lg font-serif">
-                {p.maxim}
-              </blockquote>
-            </div>
-          ))}
-        </div>
-
-        {/* Closing Banner */}
-        <div className="mt-16 p-8 rounded-3xl bg-[#1E2033] text-white text-center space-y-4 shadow-xl">
-          <div className="w-12 h-12 rounded-full bg-[#D5650F] mx-auto flex items-center justify-center text-xl font-serif font-bold">
-            चा
+      {/* Closing banner */}
+      <section className="px-4 pb-24 sm:px-6">
+        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-ink px-6 py-20 text-center">
+          <div className="mesh" aria-hidden="true">
+            <span className="mesh-layer mesh-c opacity-60" />
+            <span className="mesh-layer mesh-a opacity-35" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-serif font-normal">
-            Master Yourself Before You Rule
-          </h2>
-          <p className="max-w-lg mx-auto text-xs sm:text-sm text-slate-300 leading-relaxed">
-            “He who has not overcome his own senses cannot govern his counselors; he who cannot govern his counselors cannot protect his empire.” — Arthashastra Book I
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/chat"
-              className="inline-flex items-center gap-2 rounded-full bg-white hover:bg-[#F7F7F8] text-[#1E2033] px-6 py-3 text-xs sm:text-sm font-semibold shadow-sm transition-all"
-            >
-              <span>Ask Chanakya Everything Now</span>
-              <span className="text-[#D5650F]">✦</span>
-            </Link>
+          <div className="relative">
+            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5 text-accent">
+              <span className="animate-float-slow">
+                <Chakra width={28} height={28} />
+              </span>
+            </span>
+            <h2 className="mx-auto mt-7 max-w-2xl font-serif text-4xl leading-[1.06] tracking-tight text-white sm:text-5xl">
+              Master yourself before you rule
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-pretty text-sm leading-relaxed text-white/60 sm:text-base">
+              He who has not overcome his own senses cannot govern his counsellors; he who cannot
+              govern his counsellors cannot protect his empire.
+            </p>
+            <div className="mt-9 flex justify-center">
+              <Link
+                href="/chat"
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-ink transition-all duration-300 hover:shadow-glow"
+              >
+                <IconBolt width={16} height={16} className="text-accent" />
+                Ask Chanakya everything
+                <IconArrowRight
+                  width={16}
+                  height={16}
+                  className="transition-transform duration-300 ease-expo group-hover:translate-x-1"
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

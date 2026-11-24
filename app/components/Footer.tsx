@@ -1,83 +1,87 @@
 import Link from 'next/link'
+import { Chakra, IconArrowUpRight } from './Icons'
+
+const COLUMNS = [
+  {
+    heading: 'Knowledge',
+    links: [
+      { label: 'The 4 Upāyas', href: '/codex' },
+      { label: 'Saptāṅga Pillars', href: '/codex' },
+      { label: 'Mandala Geopolitics', href: '/codex' },
+      { label: 'Upanishadic Viveka', href: '/philosophy' },
+    ],
+  },
+  {
+    heading: 'Console',
+    links: [
+      { label: 'Ask Chanakya', href: '/chat' },
+      { label: 'Realpolitik Mode', href: '/chat?filter=arthashastra' },
+      { label: 'Discernment Mode', href: '/chat?filter=upanishad' },
+      { label: 'NVIDIA NIM', href: 'https://build.nvidia.com', external: true },
+    ],
+  },
+]
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#E6E6E6] bg-[#F7F7F8] py-12 px-4 sm:px-8 text-[#585C7B]">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-2 space-y-3">
-          <div className="flex items-center gap-1.5">
-            <span className="font-serif text-xl font-bold tracking-tight text-[#1E2033]">
-              chanakya
-            </span>
-            <span className="w-2 h-2 rounded-full bg-[#D5650F] inline-block -mt-1" />
+    <footer className="relative overflow-hidden border-t border-ink-line bg-cream">
+      <div className="mesh" aria-hidden="true">
+        <span className="mesh-layer mesh-d opacity-70" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
+          <div className="md:col-span-2">
+            <Link href="/" className="flex items-center gap-2.5">
+              <Chakra width={28} height={28} />
+              <span className="font-serif text-2xl leading-none tracking-tight text-ink">
+                chanakya
+              </span>
+            </Link>
+            <p className="mt-4 max-w-sm text-pretty text-sm leading-relaxed text-ink-soft">
+              Sovereign strategic intelligence rooted in Kautilya&apos;s Arthashastra, Chanakya Niti
+              and the Upaniṣadic discipline of discernment.
+            </p>
+            <div className="mt-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-faint">
+              <span className="h-1 w-1 rounded-full bg-accent" />
+              Built on sovereign compute
+            </div>
           </div>
-          <p className="text-xs sm:text-sm text-[#585C7B] max-w-sm leading-relaxed">
-            Sovereign strategic intelligence rooted in Kautilya&apos;s Arthashastra, Chanakya Niti, and Vedic Upanishadic discernment.
-          </p>
-          <div className="text-xs text-[#8F92A9] pt-2">
-            &copy; {new Date().getFullYear()} Characha AI. Built on sovereign compute architecture.
-          </div>
+
+          {COLUMNS.map((col) => (
+            <div key={col.heading}>
+              <h4 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink">
+                {col.heading}
+              </h4>
+              <ul className="mt-5 space-y-3">
+                {col.links.map((l) => (
+                  <li key={l.label}>
+                    <Link
+                      href={l.href}
+                      {...(l.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                      className="group inline-flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-ink"
+                    >
+                      {l.label}
+                      {l.external && (
+                        <IconArrowUpRight
+                          width={13}
+                          height={13}
+                          className="text-ink-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        />
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-[#1E2033] mb-3">
-            Treatises & Knowledge
-          </h4>
-          <ul className="space-y-2 text-xs">
-            <li>
-              <Link href="/codex" className="hover:text-[#D5650F] transition-colors">
-                The 4 Upayas (Tactics)
-              </Link>
-            </li>
-            <li>
-              <Link href="/codex" className="hover:text-[#D5650F] transition-colors">
-                Saptanga (7 Pillars)
-              </Link>
-            </li>
-            <li>
-              <Link href="/codex" className="hover:text-[#D5650F] transition-colors">
-                Mandala Geopolitics
-              </Link>
-            </li>
-            <li>
-              <Link href="/philosophy" className="hover:text-[#D5650F] transition-colors">
-                Upanishadic Viveka
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-[#1E2033] mb-3">
-            Counsel Console
-          </h4>
-          <ul className="space-y-2 text-xs">
-            <li>
-              <Link href="/chat" className="hover:text-[#D5650F] transition-colors">
-                Ask Chanakya Everything
-              </Link>
-            </li>
-            <li>
-              <Link href="/chat?filter=arthashastra" className="hover:text-[#D5650F] transition-colors">
-                Statecraft Realpolitik Mode
-              </Link>
-            </li>
-            <li>
-              <Link href="/chat?filter=upanishad" className="hover:text-[#D5650F] transition-colors">
-                Upanishadic Discernment
-              </Link>
-            </li>
-            <li>
-              <a
-                href="https://build.nvidia.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-[#D5650F] transition-colors"
-              >
-                NVIDIA NIM Infrastructure ↗
-              </a>
-            </li>
-          </ul>
+        <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-ink-line pt-6 text-xs text-ink-faint sm:flex-row sm:items-center">
+          <span>&copy; {new Date().getFullYear()} Characha AI. All rights reserved.</span>
+          <span className="font-serif text-[13px] italic text-ink-soft">
+            अर्थशास्त्रं पुनः कथयति
+          </span>
         </div>
       </div>
     </footer>
