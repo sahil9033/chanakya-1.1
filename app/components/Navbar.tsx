@@ -17,6 +17,7 @@ import {
 const NAV_LINKS = [
   { name: 'Overview', href: '/' },
   { name: 'Ask Chanakya', href: '/chat' },
+  { name: 'Nadi Astrology', href: '/astrology' },
   { name: 'Philosophy', href: '/philosophy' },
 ]
 
@@ -103,11 +104,10 @@ export default function Navbar() {
         <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-2 text-center text-[11px] sm:text-xs">
           <span className="hidden h-1 w-1 rounded-full bg-accent sm:block" />
           <span>
-            Grounded in the{' '}
-            <strong className="font-medium text-white">Arthashastra &amp; Upanishads</strong>
+            Vedic astrology &amp; <strong className="font-medium text-white">Kundali AI</strong>
             <span className="mx-2 hidden text-white/30 sm:inline">·</span>
             <span className="hidden sm:inline">
-              Sub-two-second inference on sovereign compute
+              Deterministic sidereal charts, interpreted by AI
             </span>
           </span>
         </div>
@@ -121,16 +121,16 @@ export default function Navbar() {
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           {/* Brand */}
-          <Link href="/" className="group flex items-center gap-2.5" aria-label="Chanakya home">
+          <Link href="/" className="group flex items-center gap-2.5" aria-label="Vedhh AI home">
             <span className="text-ink transition-transform duration-500 ease-expo group-hover:rotate-180">
               <Chakra width={26} height={26} />
             </span>
             <span className="flex items-baseline gap-1.5">
               <span className="font-serif text-[22px] leading-none tracking-tight text-ink">
-                chanakya
+                vedhh
               </span>
               <span className="hidden rounded-full bg-ink/[0.06] px-2 py-[3px] text-[10px] font-medium uppercase tracking-[0.12em] text-ink-soft sm:inline-block">
-                Sovereign
+                AI
               </span>
             </span>
           </Link>

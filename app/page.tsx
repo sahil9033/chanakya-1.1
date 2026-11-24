@@ -12,6 +12,7 @@ import {
   IconBolt,
   IconBook,
   IconCoins,
+  IconCompass,
   IconLotus,
   IconNetwork,
   IconScale,
@@ -80,6 +81,10 @@ const PROTOCOL = [
 ]
 
 const DOCTRINE = [
+  'Vedic Astrology',
+  'Sidereal Kundali',
+  'Nakshatra & Pada',
+  'Vimshottari Dasha',
   'Arthashastra',
   'Chāṇakya Nīti',
   'Saptāṅga',
@@ -87,7 +92,6 @@ const DOCTRINE = [
   'Ṣāḍguṇya',
   'Maṇḍala Theory',
   'Upaniṣadic Viveka',
-  'Niṣkāma Karma',
   'NVIDIA NIM',
 ]
 
@@ -273,37 +277,45 @@ export default function HomePage() {
           <Reveal className="flex justify-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Sovereign strategic intelligence
+              Vedic astrology · Kundali AI
             </span>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.02] tracking-tightest text-ink sm:text-6xl lg:text-7xl">
-              Strategic intelligence for leaders{' '}
-              <em className="italic text-accent-deep">from India</em>
+              Your Vedic chart,{' '}
+              <em className="italic text-accent-deep">calculated</em> with precision
             </h1>
           </Reveal>
 
           <Reveal delay={150}>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
-              Grounded in Kautilya&apos;s realpolitik, Chāṇakya Nīti and Upaniṣadic discernment —
-              answered with sub-two-second inference on sovereign compute.
+              Vedhh AI computes a precise sidereal (Lahiri) Kundali from your exact birth time and
+              place — Lagna, grahas, nakshatra, Vimshottari dasha and transits — then interprets only
+              the calculated chart. Counsel from the Arthashastra is built in.
             </p>
           </Reveal>
 
           <Reveal delay={220}>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
-                href="/chat"
+                href="/astrology"
                 className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-lift"
               >
-                <IconBolt width={16} height={16} className="text-accent" />
-                Ask Chanakya Everything
+                <IconCompass width={16} height={16} className="text-accent" />
+                Generate your Kundali
                 <IconArrowRight
                   width={16}
                   height={16}
                   className="transition-transform duration-300 ease-expo group-hover:translate-x-1"
                 />
+              </Link>
+              <Link
+                href="/chat"
+                className="inline-flex items-center gap-2 rounded-full border border-ink-line px-6 py-3 text-sm font-medium text-ink transition-colors duration-300 hover:bg-cream"
+              >
+                <IconBolt width={16} height={16} className="text-accent" />
+                Ask Chanakya
               </Link>
             </div>
           </Reveal>

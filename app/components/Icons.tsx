@@ -216,6 +216,15 @@ export const IconSignOut = (p: IconProps) => (
   </Base>
 )
 
+/* LinkedIn "in" mark — filled glyph */
+export function IconLinkedIn(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6.5 0h3.83v1.64h.05c.53-1 1.84-2.05 3.79-2.05C20.4 8.59 22 10.3 22 14.1V21h-4v-6.03c0-1.44-.03-3.3-2.01-3.3-2.01 0-2.32 1.57-2.32 3.19V21h-4V9Z" />
+    </svg>
+  )
+}
+
 /* Official Google "G" mark — full colour, not stroke-based */
 export function IconGoogle(props: IconProps) {
   return (

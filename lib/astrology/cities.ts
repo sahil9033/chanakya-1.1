@@ -1,0 +1,97 @@
+export interface City {
+  name: string
+  state: string
+  latitude: number
+  longitude: number
+}
+
+// Curated list of major Indian cities. Timezone is always Asia/Kolkata for India.
+export const INDIAN_CITIES: City[] = [
+  { name: 'Shirala', state: 'Maharashtra', latitude: 17.03, longitude: 74.2 },
+  { name: 'Mumbai', state: 'Maharashtra', latitude: 19.076, longitude: 72.8777 },
+  { name: 'Pune', state: 'Maharashtra', latitude: 18.5204, longitude: 73.8567 },
+  { name: 'Nagpur', state: 'Maharashtra', latitude: 21.1458, longitude: 79.0882 },
+  { name: 'Nashik', state: 'Maharashtra', latitude: 19.9975, longitude: 73.7898 },
+  { name: 'Aurangabad', state: 'Maharashtra', latitude: 19.8762, longitude: 75.3433 },
+  { name: 'Solapur', state: 'Maharashtra', latitude: 17.6599, longitude: 75.9064 },
+  { name: 'Delhi', state: 'Delhi', latitude: 28.6139, longitude: 77.209 },
+  { name: 'New Delhi', state: 'Delhi', latitude: 28.6139, longitude: 77.209 },
+  { name: 'Gurugram', state: 'Haryana', latitude: 28.4595, longitude: 77.0266 },
+  { name: 'Noida', state: 'Uttar Pradesh', latitude: 28.5355, longitude: 77.391 },
+  { name: 'Faridabad', state: 'Haryana', latitude: 28.4089, longitude: 77.3178 },
+  { name: 'Ghaziabad', state: 'Uttar Pradesh', latitude: 28.6692, longitude: 77.4538 },
+  { name: 'Bengaluru', state: 'Karnataka', latitude: 12.9716, longitude: 77.5946 },
+  { name: 'Mysuru', state: 'Karnataka', latitude: 12.2958, longitude: 76.6394 },
+  { name: 'Mangaluru', state: 'Karnataka', latitude: 12.9141, longitude: 74.856 },
+  { name: 'Hubballi', state: 'Karnataka', latitude: 15.3647, longitude: 75.124 },
+  { name: 'Hyderabad', state: 'Telangana', latitude: 17.385, longitude: 78.4867 },
+  { name: 'Warangal', state: 'Telangana', latitude: 17.9689, longitude: 79.5941 },
+  { name: 'Chennai', state: 'Tamil Nadu', latitude: 13.0827, longitude: 80.2707 },
+  { name: 'Coimbatore', state: 'Tamil Nadu', latitude: 11.0168, longitude: 76.9558 },
+  { name: 'Madurai', state: 'Tamil Nadu', latitude: 9.9252, longitude: 78.1198 },
+  { name: 'Tiruchirappalli', state: 'Tamil Nadu', latitude: 10.7905, longitude: 78.7047 },
+  { name: 'Kolkata', state: 'West Bengal', latitude: 22.5726, longitude: 88.3639 },
+  { name: 'Howrah', state: 'West Bengal', latitude: 22.5803, longitude: 88.3299 },
+  { name: 'Darjeeling', state: 'West Bengal', latitude: 27.041, longitude: 88.2426 },
+  { name: 'Ahmedabad', state: 'Gujarat', latitude: 23.0225, longitude: 72.5714 },
+  { name: 'Surat', state: 'Gujarat', latitude: 21.1702, longitude: 72.8311 },
+  { name: 'Vadodara', state: 'Gujarat', latitude: 22.3072, longitude: 73.1812 },
+  { name: 'Rajkot', state: 'Gujarat', latitude: 22.3039, longitude: 70.8022 },
+  { name: 'Jaipur', state: 'Rajasthan', latitude: 26.9124, longitude: 75.7873 },
+  { name: 'Jodhpur', state: 'Rajasthan', latitude: 26.2389, longitude: 73.0243 },
+  { name: 'Udaipur', state: 'Rajasthan', latitude: 24.5854, longitude: 73.7125 },
+  { name: 'Kota', state: 'Rajasthan', latitude: 25.2138, longitude: 75.8648 },
+  { name: 'Lucknow', state: 'Uttar Pradesh', latitude: 26.8467, longitude: 80.9462 },
+  { name: 'Kanpur', state: 'Uttar Pradesh', latitude: 26.4499, longitude: 80.3319 },
+  { name: 'Varanasi', state: 'Uttar Pradesh', latitude: 25.3176, longitude: 82.9739 },
+  { name: 'Prayagraj', state: 'Uttar Pradesh', latitude: 25.4358, longitude: 81.8463 },
+  { name: 'Agra', state: 'Uttar Pradesh', latitude: 27.1767, longitude: 78.0081 },
+  { name: 'Bhopal', state: 'Madhya Pradesh', latitude: 23.2599, longitude: 77.4126 },
+  { name: 'Indore', state: 'Madhya Pradesh', latitude: 22.7196, longitude: 75.8577 },
+  { name: 'Jabalpur', state: 'Madhya Pradesh', latitude: 23.1815, longitude: 79.9864 },
+  { name: 'Patna', state: 'Bihar', latitude: 25.5941, longitude: 85.1376 },
+  { name: 'Gaya', state: 'Bihar', latitude: 24.7955, longitude: 85.0005 },
+  { name: 'Ranchi', state: 'Jharkhand', latitude: 23.3441, longitude: 85.3096 },
+  { name: 'Jamshedpur', state: 'Jharkhand', latitude: 22.8046, longitude: 86.2029 },
+  { name: 'Bhubaneswar', state: 'Odisha', latitude: 20.2961, longitude: 85.8245 },
+  { name: 'Cuttack', state: 'Odisha', latitude: 20.4625, longitude: 85.8829 },
+  { name: 'Raipur', state: 'Chhattisgarh', latitude: 21.2514, longitude: 81.6296 },
+  { name: 'Bilaspur', state: 'Chhattisgarh', latitude: 22.08, longitude: 82.15 },
+  { name: 'Guwahati', state: 'Assam', latitude: 26.1445, longitude: 91.7362 },
+  { name: 'Dibrugarh', state: 'Assam', latitude: 27.4728, longitude: 94.912 },
+  { name: 'Shillong', state: 'Meghalaya', latitude: 25.5788, longitude: 91.8933 },
+  { name: 'Agartala', state: 'Tripura', latitude: 23.8315, longitude: 91.2868 },
+  { name: 'Aizawl', state: 'Mizoram', latitude: 23.7271, longitude: 92.7173 },
+  { name: 'Imphal', state: 'Manipur', latitude: 24.817, longitude: 93.9368 },
+  { name: 'Kohima', state: 'Nagaland', latitude: 25.6747, longitude: 94.1086 },
+  { name: 'Itanagar', state: 'Arunachal Pradesh', latitude: 27.0844, longitude: 93.6053 },
+  { name: 'Gangtok', state: 'Sikkim', latitude: 27.3389, longitude: 88.6065 },
+  { name: 'Thiruvananthapuram', state: 'Kerala', latitude: 8.5241, longitude: 76.9366 },
+  { name: 'Kochi', state: 'Kerala', latitude: 9.9312, longitude: 76.2673 },
+  { name: 'Kozhikode', state: 'Kerala', latitude: 11.2588, longitude: 75.7804 },
+  { name: 'Thrissur', state: 'Kerala', latitude: 10.5276, longitude: 76.2144 },
+  { name: 'Panaji', state: 'Goa', latitude: 15.4909, longitude: 73.8278 },
+  { name: 'Margao', state: 'Goa', latitude: 15.2993, longitude: 73.9676 },
+  { name: 'Chandigarh', state: 'Chandigarh', latitude: 30.7333, longitude: 76.7794 },
+  { name: 'Dehradun', state: 'Uttarakhand', latitude: 30.3165, longitude: 78.0322 },
+  { name: 'Haridwar', state: 'Uttarakhand', latitude: 29.9457, longitude: 78.1642 },
+  { name: 'Shimla', state: 'Himachal Pradesh', latitude: 31.1048, longitude: 77.1734 },
+  { name: 'Manali', state: 'Himachal Pradesh', latitude: 32.2396, longitude: 77.1887 },
+  { name: 'Srinagar', state: 'Jammu and Kashmir', latitude: 34.0837, longitude: 74.7973 },
+  { name: 'Jammu', state: 'Jammu and Kashmir', latitude: 32.7266, longitude: 74.857 },
+  { name: 'Leh', state: 'Ladakh', latitude: 34.1526, longitude: 77.5771 },
+  { name: 'Port Blair', state: 'Andaman and Nicobar', latitude: 11.6234, longitude: 92.7265 },
+  { name: 'Puducherry', state: 'Puducherry', latitude: 11.9416, longitude: 79.8083 },
+  { name: 'Visakhapatnam', state: 'Andhra Pradesh', latitude: 17.6868, longitude: 83.2185 },
+  { name: 'Vijayawada', state: 'Andhra Pradesh', latitude: 16.5062, longitude: 80.648 },
+  { name: 'Tirupati', state: 'Andhra Pradesh', latitude: 13.6288, longitude: 79.4192 },
+  { name: 'Guntur', state: 'Andhra Pradesh', latitude: 16.3067, longitude: 80.4365 },
+]
+
+export function findCities(query: string): City[] {
+  const q = query.trim().toLowerCase()
+  if (!q) return []
+  return INDIAN_CITIES.filter(
+    (c) => c.name.toLowerCase().includes(q) || c.state.toLowerCase().includes(q)
+  ).slice(0, 8)
+}
