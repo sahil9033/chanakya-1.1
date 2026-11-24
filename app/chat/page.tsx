@@ -10,6 +10,7 @@ import {
   IconBolt,
   IconCheck,
   IconChevronRight,
+  IconClose,
   IconCopy,
   IconMessageSquare,
   IconPlus,
@@ -177,13 +178,20 @@ function ChatContent() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [currentSessionId, setCurrentSessionId] = useState<string>('')
 
   const endRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const hasAutoFired = useRef(false)
+
+  // On desktop screens (>=768px), open sidebar by default; on mobile, keep closed
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+      setSidebarOpen(true)
+    }
+  }, [])
 
   // Load chat sessions from localStorage
   useEffect(() => {
@@ -264,6 +272,9 @@ function ChatContent() {
     setMessages([])
     setCurrentSessionId(`session_${Date.now()}`)
     setInput('')
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false)
+    }
     if (textareaRef.current) textareaRef.current.focus()
   }
 
@@ -272,6 +283,9 @@ function ChatContent() {
     setMessages(s.messages)
     setFilter(s.filter || 'all')
     setSelectedModel(s.model || 'bolt')
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false)
+    }
   }
 
   function deleteSession(e: React.MouseEvent, id: string) {
@@ -387,30 +401,55 @@ function ChatContent() {
   const activeModelObj = currentModel(selectedModel)
 
   return (
-    <div className="flex h-[calc(100vh-65px)] w-full overflow-hidden bg-canvas text-ink">
+    <div className="flex h-[calc(100dvh-65px)] w-full overflow-hidden bg-canvas text-ink relative">
       {/* =========================================================================
-          CLAUDE-STYLE COLLAPSIBLE SIDEBAR (Left Panel)
+          MOBILE BACKDROP OVERLAY
+         ========================================================================= */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-xs md:hidden animate-fade-in"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* =========================================================================
+          CLAUDE-STYLE COLLAPSIBLE SIDEBAR (Drawer on mobile, side panel on desktop)
          ========================================================================= */}
       <aside
-        className={`relative z-20 flex flex-col border-r border-ink-line bg-canvas transition-all duration-300 ease-in-out ${
-          sidebarOpen ? 'w-64 sm:w-72 shrink-0' : 'w-0 -translate-x-full overflow-hidden border-none'
+        className={`fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-ink-line bg-canvas shadow-2xl transition-transform duration-300 ease-in-out md:relative md:inset-auto md:z-20 md:shadow-none md:translate-x-0 ${
+          sidebarOpen
+            ? 'translate-x-0 w-72 sm:w-80 md:w-64 lg:w-72 shrink-0'
+            : '-translate-x-full w-72 md:w-0 md:overflow-hidden md:border-none'
         }`}
       >
         <div className="flex h-full flex-col p-3.5">
-          {/* New Consultation CTA Button */}
-          <button
-            type="button"
-            onClick={startNewChat}
-            className="group flex w-full items-center justify-between rounded-2xl border border-ink-line bg-cream/70 px-4 py-2.5 text-xs font-medium text-ink shadow-xs transition-all duration-200 hover:border-accent/40 hover:bg-cream"
-          >
-            <span className="flex items-center gap-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ink text-canvas">
-                <IconPlus width={12} height={12} />
+          {/* Header Row: New Consultation CTA + Mobile Close Button */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={startNewChat}
+              className="group flex flex-1 items-center justify-between rounded-2xl border border-ink-line bg-cream/70 px-4 py-2.5 text-xs font-medium text-ink shadow-xs transition-all duration-200 hover:border-accent/40 hover:bg-cream"
+            >
+              <span className="flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ink text-canvas">
+                  <IconPlus width={12} height={12} />
+                </span>
+                <span>New consultation</span>
               </span>
-              <span>New consultation</span>
-            </span>
-            <span className="text-[10px] text-ink-faint">⌘K</span>
-          </button>
+              <span className="text-[10px] text-ink-faint hidden sm:inline">⌘K</span>
+            </button>
+
+            {/* Mobile close button */}
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(false)}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-ink-line bg-canvas text-ink-soft hover:text-ink md:hidden transition-colors"
+              title="Close sidebar"
+            >
+              <IconClose width={16} height={16} />
+            </button>
+          </div>
 
           {/* Treatise Strategy Lenses Selection */}
           <div className="mt-5">
@@ -424,7 +463,12 @@ function ChatContent() {
                   <button
                     key={tab.id}
                     type="button"
-                    onClick={() => setFilter(tab.id)}
+                    onClick={() => {
+                      setFilter(tab.id)
+                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                        setSidebarOpen(false)
+                      }
+                    }}
                     className={`flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-left text-xs transition-colors ${
                       active
                         ? 'bg-ink text-canvas font-medium shadow-xs'
@@ -451,7 +495,12 @@ function ChatContent() {
                   <button
                     key={m.id}
                     type="button"
-                    onClick={() => setSelectedModel(m.id)}
+                    onClick={() => {
+                      setSelectedModel(m.id)
+                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                        setSidebarOpen(false)
+                      }
+                    }}
                     className={`rounded-lg px-2 py-1.5 text-[11px] font-medium transition-all ${
                       active
                         ? 'bg-canvas text-ink shadow-xs border border-ink-line'
@@ -523,25 +572,25 @@ function ChatContent() {
       {/* =========================================================================
           MAIN CHAT PANEL (Claude-Style Central Reading & Conversation)
          ========================================================================= */}
-      <div className="relative flex flex-1 flex-col overflow-hidden bg-canvas">
+      <div className="relative flex flex-1 flex-col overflow-hidden bg-canvas w-full">
         {/* Top Header Bar inside Chat View */}
-        <div className="flex h-13 shrink-0 items-center justify-between border-b border-ink-line bg-canvas/85 px-4 backdrop-blur-md">
-          <div className="flex items-center gap-2.5">
+        <div className="flex h-12 sm:h-13 shrink-0 items-center justify-between border-b border-ink-line bg-canvas/85 px-3 sm:px-4 backdrop-blur-md">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
             {/* Sidebar toggle button (Claude style) */}
             <button
               type="button"
               onClick={() => setSidebarOpen((v) => !v)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line bg-canvas text-ink-soft hover:text-ink hover:border-accent/40 transition-colors"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line bg-canvas text-ink-soft hover:text-ink hover:border-accent/40 transition-colors"
               title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
             >
               <IconSidebar width={16} height={16} />
             </button>
 
             {/* Active Mode & Model Badges */}
-            <div className="flex items-center gap-1.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-cream px-3 py-1 text-xs font-medium text-ink">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                {activeLensObj.label}
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-cream px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-medium text-ink max-w-[140px] sm:max-w-none truncate">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
+                <span className="truncate">{activeLensObj.label}</span>
               </span>
               <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-ink-line/70 bg-canvas px-2.5 py-1 text-[11px] text-ink-soft">
                 {activeModelObj.tag}
@@ -550,46 +599,46 @@ function ChatContent() {
           </div>
 
           {/* Quick Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             {hasMessages && (
               <button
                 type="button"
                 onClick={startNewChat}
-                className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-canvas px-3 py-1.5 text-xs text-ink-soft hover:text-ink hover:border-accent/30 transition-colors"
+                className="inline-flex items-center gap-1 rounded-full border border-ink-line bg-canvas px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs text-ink-soft hover:text-ink hover:border-accent/30 transition-colors"
               >
-                <IconPlus width={13} height={13} />
-                <span>New</span>
+                <IconPlus width={12} height={12} />
+                <span className="hidden xs:inline">New</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Scrollable Conversation Stage */}
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 pb-48">
+        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 pb-36 sm:pb-48">
           <div className="mx-auto w-full max-w-3xl">
             {!hasMessages ? (
               /* Empty State (Claude style with Chanakya sovereign branding) */
-              <div className="py-12 sm:py-20 text-center animate-fade-in">
-                <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-cream border border-ink-line shadow-xs mb-5">
-                  <span className="font-serif text-3xl font-bold text-accent-deep">चा</span>
+              <div className="py-8 sm:py-20 text-center animate-fade-in">
+                <div className="inline-flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-cream border border-ink-line shadow-xs mb-4 sm:mb-5">
+                  <span className="font-serif text-2xl sm:text-3xl font-bold text-accent-deep">चा</span>
                 </div>
 
-                <h1 className="font-serif text-3xl sm:text-4xl text-ink font-normal tracking-tight">
+                <h1 className="font-serif text-2xl sm:text-4xl text-ink font-normal tracking-tight">
                   Consult Acharya Chanakya
                 </h1>
-                <p className="mt-3 max-w-md mx-auto text-sm text-ink-soft leading-relaxed">
+                <p className="mt-2.5 sm:mt-3 max-w-md mx-auto text-xs sm:text-sm text-ink-soft leading-relaxed px-2">
                   Strategic counsel synthesized from the Arthashastra, Chanakya Niti, and Upanishads.
                   Select a dilemma below or pose your inquiry directly.
                 </p>
 
                 {/* Quick Dilemma Cards */}
-                <div className="mt-10 grid grid-cols-1 gap-2.5 sm:grid-cols-2 text-left">
+                <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-2.5 sm:grid-cols-2 text-left">
                   {STRATEGIC_INQUIRIES.map((prompt, i) => (
                     <button
                       key={i}
                       type="button"
                       onClick={() => handleSend(prompt)}
-                      className="group flex items-start gap-3 rounded-2xl border border-ink-line bg-canvas p-4 text-xs leading-relaxed text-ink-soft hover:border-accent/40 hover:text-ink hover:shadow-soft transition-all"
+                      className="group flex items-start gap-3 rounded-2xl border border-ink-line bg-canvas p-3.5 sm:p-4 text-xs leading-relaxed text-ink-soft hover:border-accent/40 hover:text-ink hover:shadow-soft transition-all"
                     >
                       <IconArrowRight
                         width={14}
@@ -603,7 +652,7 @@ function ChatContent() {
               </div>
             ) : (
               /* Message Thread */
-              <div className="space-y-7">
+              <div className="space-y-5 sm:space-y-7">
                 {messages.map((m, i) => {
                   const isUser = m.role === 'user'
                   return (
@@ -611,7 +660,7 @@ function ChatContent() {
                       key={i}
                       className={`flex flex-col animate-fade-in ${isUser ? 'items-end' : 'items-start'}`}
                     >
-                      <div className="mb-2 flex items-center gap-2 px-1 text-xs text-ink-faint">
+                      <div className="mb-1.5 sm:mb-2 flex items-center gap-2 px-1 text-xs text-ink-faint">
                         {!isUser ? (
                           <>
                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
@@ -638,16 +687,18 @@ function ChatContent() {
                       </div>
 
                       <div
-                        className={`max-w-[92%] rounded-3xl px-5 py-4 shadow-sm sm:max-w-[85%] sm:px-6 ${
+                        className={`max-w-[92%] sm:max-w-[85%] rounded-2xl sm:rounded-3xl px-4 py-3 sm:px-6 sm:py-4 shadow-sm ${
                           isUser
                             ? 'rounded-tr-lg bg-ink text-canvas'
-                            : 'rounded-tl-lg border border-ink-line bg-canvas'
+                            : 'rounded-tl-lg border border-ink-line bg-canvas w-full sm:w-auto'
                         }`}
                       >
                         {isUser ? (
-                          <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{m.content}</p>
+                          <p className="whitespace-pre-wrap text-sm sm:text-[15px] leading-relaxed break-words">{m.content}</p>
                         ) : m.content ? (
-                          <FormattedContent content={m.content} />
+                          <div className="break-words">
+                            <FormattedContent content={m.content} />
+                          </div>
                         ) : (
                           <div className="flex items-center gap-2.5 text-sm text-ink-soft">
                             <span className="flex gap-1">
@@ -665,14 +716,14 @@ function ChatContent() {
 
                         {!isUser && m.content && (
                           <div className="mt-4 flex items-center justify-between gap-3 border-t border-ink-line pt-3">
-                            <span className="inline-flex items-center gap-1.5 text-[11px] text-ink-faint">
-                              <IconCheck width={12} height={12} className="text-accent-deep" />
-                              {activeLensObj.label} lens applied
+                            <span className="inline-flex items-center gap-1.5 text-[11px] text-ink-faint truncate">
+                              <IconCheck width={12} height={12} className="text-accent-deep shrink-0" />
+                              <span className="truncate">{activeLensObj.label} lens</span>
                             </span>
                             <button
                               type="button"
                               onClick={() => copyToClipboard(m.content, i)}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-cream px-2.5 py-1 text-[11px] text-ink-soft transition-colors hover:text-ink"
+                              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ink-line bg-cream px-2.5 py-1 text-[11px] text-ink-soft transition-colors hover:text-ink"
                             >
                               {copiedIdx === i ? (
                                 <>
@@ -695,17 +746,17 @@ function ChatContent() {
               </div>
             )}
 
-            <div ref={endRef} className="scroll-mb-40" />
+            <div ref={endRef} className="scroll-mb-36 sm:scroll-mb-40" />
           </div>
         </div>
 
         {/* =========================================================================
-            CLAUDE-STYLE FLOATING COMPOSER AT BOTTOM
+            CLAUDE-STYLE FLOATING COMPOSER AT BOTTOM (Mobile responsive)
            ========================================================================= */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-4 pt-10 sm:p-6">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-2.5 sm:p-4 pb-2.5 sm:pb-6 pt-5 sm:pt-10">
           <div className="pointer-events-auto mx-auto w-full max-w-3xl">
-            <div className="rounded-3xl border border-ink-line bg-canvas/95 p-2 shadow-soft backdrop-blur-xl transition-all duration-300 focus-within:border-accent/45 focus-within:shadow-glow sm:p-2.5">
-              <div className="flex items-end gap-2 px-1">
+            <div className="rounded-2xl sm:rounded-3xl border border-ink-line bg-canvas/95 p-1.5 sm:p-2.5 shadow-soft backdrop-blur-xl transition-all duration-300 focus-within:border-accent/45 focus-within:shadow-glow">
+              <div className="flex items-end gap-1.5 sm:gap-2 px-1">
                 <textarea
                   ref={textareaRef}
                   value={input}
@@ -716,31 +767,31 @@ function ChatContent() {
                       handleSend()
                     }
                   }}
-                  placeholder="Ask Chanakya anything — statecraft, negotiation, human nature…"
+                  placeholder="Ask Chanakya anything — statecraft, negotiation…"
                   disabled={loading}
                   rows={1}
-                  className="max-h-40 flex-1 resize-none bg-transparent px-3 py-2.5 text-sm leading-normal text-ink placeholder:text-ink-faint focus:outline-none focus:ring-0 sm:text-base"
+                  className="max-h-36 sm:max-h-40 flex-1 resize-none bg-transparent px-2.5 sm:px-3 py-2 text-base leading-normal text-ink placeholder:text-ink-faint focus:outline-none focus:ring-0"
                 />
                 <button
                   type="button"
                   onClick={() => handleSend()}
                   disabled={loading || !input.trim()}
-                  className="flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-xs font-medium text-canvas shadow-sm transition-all duration-200 hover:shadow-lift disabled:pointer-events-none disabled:opacity-25 sm:text-sm"
+                  className="flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-medium text-canvas shadow-sm transition-all duration-200 hover:shadow-lift disabled:pointer-events-none disabled:opacity-25 sm:text-sm"
                 >
-                  <IconSend width={15} height={15} />
-                  Ask
+                  <IconSend width={14} height={14} />
+                  <span>Ask</span>
                 </button>
               </div>
 
               {/* Bottom bar inside composer (Treatise + Model selector pills Claude-style) */}
-              <div className="flex flex-wrap items-center justify-between gap-2 px-2 pb-0.5 pt-2 border-t border-ink-line/50">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-1.5 px-1 sm:px-2 pb-0.5 pt-1.5 sm:pt-2 border-t border-ink-line/50">
+                <div className="flex items-center gap-1.5 max-w-full overflow-x-auto no-scrollbar py-0.5">
                   {/* Treatise Lens Pill Dropdown */}
-                  <div className="relative group">
+                  <div className="relative group shrink-0">
                     <select
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
-                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-3 pr-7 py-1 text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none"
+                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[130px] sm:max-w-none truncate"
                     >
                       {TREATISE_LENSES.map((t) => (
                         <option key={t.id} value={t.id}>
@@ -749,18 +800,18 @@ function ChatContent() {
                       ))}
                     </select>
                     <IconChevronRight
-                      width={12}
-                      height={12}
-                      className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rotate-90 text-ink-faint"
+                      width={11}
+                      height={11}
+                      className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-ink-faint"
                     />
                   </div>
 
                   {/* Model Selector Pill Dropdown */}
-                  <div className="relative group">
+                  <div className="relative group shrink-0">
                     <select
                       value={selectedModel}
                       onChange={(e) => setSelectedModel(e.target.value)}
-                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-3 pr-7 py-1 text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none"
+                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[110px] sm:max-w-none truncate"
                     >
                       {AI_MODELS.map((m) => (
                         <option key={m.id} value={m.id}>
@@ -769,14 +820,14 @@ function ChatContent() {
                       ))}
                     </select>
                     <IconChevronRight
-                      width={12}
-                      height={12}
-                      className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rotate-90 text-ink-faint"
+                      width={11}
+                      height={11}
+                      className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-ink-faint"
                     />
                   </div>
                 </div>
 
-                <span className="hidden items-center gap-1.5 text-[11px] text-ink-faint sm:flex">
+                <span className="hidden items-center gap-1.5 text-[11px] text-ink-faint md:flex shrink-0">
                   <span className="h-1 w-1 rounded-full bg-accent" />
                   Enter ↵ to send · sub-second streaming
                 </span>
