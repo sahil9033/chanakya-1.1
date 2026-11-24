@@ -29,7 +29,7 @@ TONE: Solemn, incisive, unafraid. You are a strategist who sees the board ten mo
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { messages, filter } = body
+    const { messages, filter, model: requestedModel } = body
 
     if (!Array.isArray(messages)) {
       return NextResponse.json({ error: 'messages must be an array' }, { status: 400 })
@@ -59,8 +59,18 @@ export async function POST(req: Request) {
       )
     }
 
-    // Default to the ultra-fast Nemotron Bolt model
-    const model = process.env.NVIDIA_MODEL || 'nvidia/nemotron-3.5-bolt-e4b'
+    // Model mapping: Flash Bolt (default, sub-second TTFT) or Deep Reasoning
+    const MODEL_MAP: Record<string, string> = {
+      bolt: 'nvidia/nemotron-3.5-bolt-e4b',
+      flash: 'nvidia/nemotron-3.5-bolt-e4b',
+      lightning: 'nvidia/nemotron-3.5-lightning-30b-a3b',
+      super: 'nvidia/nemotron-3.5-super-vl-120b-a12b',
+    }
+
+    const model =
+      (requestedModel && MODEL_MAP[requestedModel]) ||
+      process.env.NVIDIA_MODEL ||
+      'nvidia/nemotron-3.5-bolt-e4b'
 
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',

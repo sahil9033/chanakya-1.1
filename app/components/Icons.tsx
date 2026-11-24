@@ -257,6 +257,34 @@ export const IconMusic = (p: IconProps) => (
   </Base>
 )
 
+export const IconPlus = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 5v14" />
+    <path d="M5 12h14" />
+  </Base>
+)
+
+export const IconTrash = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M3 6h18" />
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+  </Base>
+)
+
+export const IconSidebar = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M9 3v18" />
+  </Base>
+)
+
+export const IconMessageSquare = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </Base>
+)
+
 /* LinkedIn "in" mark — filled glyph */
 export function IconLinkedIn(props: IconProps) {
   return (
