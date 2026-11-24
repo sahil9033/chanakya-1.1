@@ -5,9 +5,9 @@ const COLUMNS = [
   {
     heading: 'Knowledge',
     links: [
-      { label: 'The 4 Upāyas', href: '/codex' },
-      { label: 'Saptāṅga Pillars', href: '/codex' },
-      { label: 'Mandala Geopolitics', href: '/codex' },
+      { label: 'The 4 Upāyas', href: '/chat?filter=arthashastra' },
+      { label: 'Saptāṅga Pillars', href: '/philosophy' },
+      { label: 'Mandala Geopolitics', href: '/chat?filter=arthashastra' },
       { label: 'Upanishadic Viveka', href: '/philosophy' },
     ],
   },

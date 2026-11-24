@@ -9,7 +9,6 @@ import Reveal from './components/Reveal'
 import {
   Chakra,
   IconArrowRight,
-  IconArrowUpRight,
   IconBolt,
   IconBook,
   IconCoins,
@@ -306,17 +305,6 @@ export default function HomePage() {
                   className="transition-transform duration-300 ease-expo group-hover:translate-x-1"
                 />
               </Link>
-              <Link
-                href="/codex"
-                className="group inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas px-6 py-3 text-sm font-medium text-ink transition-all duration-300 hover:border-ink/25 hover:shadow-soft"
-              >
-                Explore the Codex
-                <IconArrowUpRight
-                  width={16}
-                  height={16}
-                  className="text-ink-faint transition-transform duration-300 ease-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                />
-              </Link>
             </div>
           </Reveal>
 
@@ -510,10 +498,10 @@ export default function HomePage() {
                   total conviction. Chanakya never opens with the sword.
                 </p>
                 <Link
-                  href="/codex"
+                  href="/chat?filter=arthashastra"
                   className="group mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:shadow-lift"
                 >
-                  Study the frameworks
+                  Ask Chanakya about the Upāyas
                   <IconArrowRight
                     width={16}
                     height={16}

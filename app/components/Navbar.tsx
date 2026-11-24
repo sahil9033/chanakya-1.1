@@ -17,7 +17,6 @@ import {
 const NAV_LINKS = [
   { name: 'Overview', href: '/' },
   { name: 'Ask Chanakya', href: '/chat' },
-  { name: 'The Codex', href: '/codex' },
   { name: 'Philosophy', href: '/philosophy' },
 ]
 
