@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
 import { AuthProvider } from '../lib/AuthContext'
+import MusicPlayer from './components/MusicPlayer'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.app'
 
@@ -136,6 +137,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
         <AuthProvider>{children}</AuthProvider>
+        <MusicPlayer />
       </body>
     </html>
   )

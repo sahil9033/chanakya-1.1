@@ -5,7 +5,23 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SignInGate from '../components/SignInGate'
 import Reveal from '../components/Reveal'
-import { Chakra, IconArrowRight, IconBolt } from '../components/Icons'
+import {
+  Chakra,
+  IconArrowRight,
+  IconBolt,
+  IconBook,
+  IconCheck,
+  IconCoins,
+  IconCompass,
+  IconLayers,
+  IconLotus,
+  IconNetwork,
+  IconScale,
+  IconShield,
+  IconSpark,
+  IconSplit,
+  IconTarget,
+} from '../components/Icons'
 import { findCities } from '../../lib/astrology/cities'
 
 const PLANET_ABBR: Record<string, string> = {
@@ -132,49 +148,134 @@ function KundaliChart({ chart }: { chart: ChartPayload }) {
   )
 }
 
-function FormattedInterpretation({ text }: { text: string }) {
+function renderInline(text: string) {
+  return text.split(/(\*\*.*?\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? (
+      <strong key={i} className="font-semibold text-ink">
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  )
+}
+
+/** Renders the body lines of a single section (bullets, numbered, why-callout, bold). */
+function SectionBody({ text }: { text: string }) {
   const lines = text.split('\n')
   return (
-    <div className="space-y-2.5 text-[15px] leading-relaxed text-ink/90">
+    <div className="space-y-2.5 text-[14px] leading-relaxed text-ink/85">
       {lines.map((line, i) => {
         const t = line.trim()
-        if (!t) return <div key={i} className="h-1" />
-        if (/^#{1,3}\s/.test(t)) {
-          const level = t.match(/^#+/)![0].length
+        if (!t) return <div key={i} className="h-0.5" />
+        if (/^[-*•]\s+/.test(t)) {
+          const body = t.replace(/^[-*•]\s+/, '')
           return (
-            <h3
-              key={i}
-              className={`mt-5 font-serif tracking-tight text-ink ${level === 1 ? 'text-xl' : level === 2 ? 'text-lg' : 'text-base'}`}
-            >
-              {t.replace(/^#+\s/, '')}
-            </h3>
-          )
-        }
-        if (/^[-*]\s+/.test(t)) {
-          return (
-            <div key={i} className="flex items-start gap-2.5 pl-1">
-              <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-accent" />
-              <span>{t.replace(/^[-*]\s+/, '')}</span>
+            <div key={i} className="flex items-start gap-2.5 pl-0.5">
+              <span className="mt-[8px] h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span>{renderInline(body)}</span>
             </div>
           )
         }
         if (/^\d+\.\s+/.test(t)) {
           const m = t.match(/^(\d+)\.\s+(.*)/)!
           return (
-            <div key={i} className="flex items-start gap-2.5 pl-1">
-              <span className="mt-0.5 w-5 shrink-0 text-right font-mono text-xs font-semibold text-accent-deep">{m[1]}</span>
-              <span>{m[2]}</span>
+            <div key={i} className="flex items-start gap-2.5 pl-0.5">
+              <span className="mt-0.5 w-4 shrink-0 text-right font-mono text-[11px] font-semibold text-accent-deep">
+                {m[1]}
+              </span>
+              <span>{renderInline(m[2])}</span>
             </div>
           )
         }
-        if (/^\*\*/.test(t) || t.toLowerCase().startsWith('why')) {
+        if (t.toLowerCase().startsWith('why') || /^\*\*/.test(t)) {
           return (
-            <p key={i} className="rounded-xl border border-ink-line bg-cream px-3.5 py-2.5 text-[13px] leading-relaxed text-ink-soft">
-              {t}
+            <p
+              key={i}
+              className="rounded-xl border border-ink-line bg-cream px-3 py-2 text-[12.5px] leading-relaxed text-ink-soft"
+            >
+              {renderInline(t)}
             </p>
           )
         }
-        return <p key={i}>{t}</p>
+        return (
+          <p key={i} className="text-[14px] leading-relaxed">
+            {renderInline(t)}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
+interface Section {
+  title: string
+  body: string
+}
+
+function parseSections(text: string): Section[] {
+  const lines = text.split('\n')
+  const sections: Section[] = []
+  let current: Section | null = null
+  for (const line of lines) {
+    const m = line.match(/^#{1,3}\s+(.*)/)
+    if (m) {
+      if (current) sections.push(current)
+      current = { title: m[1].trim(), body: '' }
+    } else if (current) {
+      current.body += line + '\n'
+    }
+  }
+  if (current) sections.push(current)
+  if (sections.length === 0) sections.push({ title: 'Interpretation', body: text })
+  return sections.filter((s) => s.body.trim().length > 0 || s.title)
+}
+
+function sectionMeta(title: string) {
+  const t = title.toLowerCase()
+  if (t.includes('overall') || t.includes('personality'))
+    return { Icon: IconSpark, label: 'Personality' }
+  if (t.includes('love timeline')) return { Icon: IconNetwork, label: 'Love Timeline' }
+  if (t.includes('love') || t.includes('relationship'))
+    return { Icon: IconLotus, label: 'Love & Relationships' }
+  if (t.includes('career') || t.includes('work')) return { Icon: IconTarget, label: 'Career' }
+  if (t.includes('wealth') || t.includes('money') || t.includes('luxury'))
+    return { Icon: IconCoins, label: 'Wealth & Luxury' }
+  if (t.includes('health')) return { Icon: IconShield, label: 'Health' }
+  if (t.includes('education') || t.includes('study')) return { Icon: IconBook, label: 'Education' }
+  if (t.includes('problem') || t.includes('challenge'))
+    return { Icon: IconSplit, label: 'Problems & Challenges' }
+  if (t.includes('solution') || t.includes('remedy'))
+    return { Icon: IconCheck, label: 'Solutions & Remedies' }
+  if (t.includes('12 month')) return { Icon: IconCompass, label: 'Next 12 Months' }
+  if (t.includes('5 year') || t.includes('five year')) return { Icon: IconLayers, label: 'Next 5 Years' }
+  if (t.includes('dasha')) return { Icon: IconScale, label: 'Dasha Timeline' }
+  return { Icon: IconSpark, label: title }
+}
+
+function SectionedInterpretation({ text }: { text: string }) {
+  const sections = parseSections(text)
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      {sections.map((s, i) => {
+        const { Icon, label } = sectionMeta(s.title)
+        return (
+          <Reveal key={i} delay={(i % 2) * 70} className="h-full">
+            <article className="spot group flex h-full flex-col rounded-3xl border border-ink-line bg-canvas p-5 transition-all duration-500 ease-expo hover:border-accent/25 hover:shadow-soft sm:p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-ink-line bg-cream text-ink transition-colors duration-500 group-hover:border-accent/30 group-hover:text-accent-deep">
+                  <Icon width={19} height={19} />
+                </span>
+                <h3 className="font-serif text-xl leading-tight tracking-tight text-ink">
+                  {label}
+                </h3>
+              </div>
+              <div className="mt-4 flex-1">
+                <SectionBody text={s.body} />
+              </div>
+            </article>
+          </Reveal>
+        )
       })}
     </div>
   )
@@ -636,7 +737,7 @@ export default function KundaliPage() {
                   )}
                   <div className="mt-5">
                     {interpretation ? (
-                      <FormattedInterpretation text={interpretation} />
+                      <SectionedInterpretation text={interpretation} />
                     ) : !nimError ? (
                       <div className="flex items-center gap-2 text-sm text-ink-soft">
                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-ink-line border-t-accent" />

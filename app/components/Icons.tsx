@@ -236,6 +236,27 @@ export const IconSignOut = (p: IconProps) => (
   </Base>
 )
 
+export const IconPlay = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M7 4.5v15l12-7.5-12-7.5Z" fill="currentColor" stroke="none" />
+  </Base>
+)
+
+export const IconPause = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="6" y="4.5" width="4" height="15" rx="1" fill="currentColor" stroke="none" />
+    <rect x="14" y="4.5" width="4" height="15" rx="1" fill="currentColor" stroke="none" />
+  </Base>
+)
+
+export const IconMusic = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 18V5l11-2v13" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="17" cy="16" r="3" />
+  </Base>
+)
+
 /* LinkedIn "in" mark — filled glyph */
 export function IconLinkedIn(props: IconProps) {
   return (

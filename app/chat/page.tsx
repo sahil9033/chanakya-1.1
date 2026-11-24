@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import SignInGate from '../components/SignInGate'
 import Reveal from '../components/Reveal'
 import {
@@ -314,7 +313,7 @@ function ChatContent() {
       </div>
 
       {/* Conversation */}
-      <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 pb-44 sm:px-6">
         {messages.length === 0 ? (
           <div className="py-2">
             <Reveal>
@@ -438,7 +437,7 @@ function ChatContent() {
       </div>
 
       {/* Composer */}
-      <div className="pointer-events-none sticky bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-4 sm:p-6">
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-4 pt-10 sm:p-6">
         <div className="pointer-events-auto mx-auto w-full max-w-3xl">
           <div className="rounded-3xl border border-ink-line bg-canvas/90 p-2 shadow-soft backdrop-blur-xl transition-all duration-300 focus-within:border-accent/45 focus-within:shadow-glow sm:p-2.5">
             <div className="flex items-end gap-2 px-1">
@@ -499,7 +498,6 @@ export default function ChatPage() {
           <ChatContent />
         </Suspense>
       </SignInGate>
-      <Footer />
     </div>
   )
 }

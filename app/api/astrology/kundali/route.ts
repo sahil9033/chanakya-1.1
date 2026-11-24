@@ -35,12 +35,14 @@ Produce exactly these sections:
 4. WEALTH & LUXURY (2nd, 11th, Venus, Jupiter, 5th, 9th; wealth yogas; dasha/transits) — likely sources of luxury (career/business/investments/partnerships/foreign/creative-tech)
 5. HEALTH (1st, 6th, 8th, 12th houses; Lagna lord, Sun, Moon, Saturn; dasha) — clearly label "Traditional astrological interpretation — not medical diagnosis"
 6. EDUCATION (4th, 5th houses; Mercury, Jupiter; dasha)
-7. NEXT 12 MONTHS — month-by-month based on ACTUAL dasha and transit data (career, love, money, education, energy, opportunities, cautions)
-8. NEXT 5 YEARS — yearly timeline based on calculated Mahadasha/Antardasha and major transits
-9. LOVE TIMELINE — attraction windows, relationship-start windows, commitment windows, potential conflict periods, marriage-supportive periods (date ranges only)
-10. DASHA TIMELINE — Mahadasha → Antardasha → start → end → brief interpretation
+7. PROBLEMS & CHALLENGES (the chart's main difficulties: difficult houses, malefic influences, weak planets, dasha hurdles) — be specific and name the chart factor
+8. SOLUTIONS & REMEDIES (practical remedies: gemstones, mantras, colors, days, charity, lifestyle adjustments, actions) — each remedy tied to a specific problem above
+9. NEXT 12 MONTHS — month-by-month based on ACTUAL dasha and transit data (career, love, money, education, energy, opportunities, cautions)
+10. NEXT 5 YEARS — yearly timeline based on calculated Mahadasha/Antardasha and major transits
+11. LOVE TIMELINE — attraction windows, relationship-start windows, commitment windows, potential conflict periods, marriage-supportive periods (date ranges only)
+12. DASHA TIMELINE — Mahadasha → Antardasha → start → end → brief interpretation
 
-Use markdown headings. Under each section add a "Why?" line citing the chart factors. Where confidence is low, say so (Strong / Moderate / Weak indication).`
+Use markdown headings (## for each section). Under each section add a "Why?" line citing the chart factors. Where confidence is low, say so (Strong / Moderate / Weak indication).`
 
 export async function POST(req: Request) {
   try {
