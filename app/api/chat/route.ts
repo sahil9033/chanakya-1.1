@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
+export const maxDuration = 60
 
 export async function POST(req: Request) {
   try {
@@ -25,6 +26,8 @@ export async function POST(req: Request) {
       )
     }
 
+    const model = process.env.NVIDIA_MODEL || 'nvidia/nemotron-3.5-super-vl-120b-a12b'
+
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
@@ -33,7 +36,7 @@ export async function POST(req: Request) {
         Accept: 'application/json',
       },
       body: JSON.stringify({
-        model: 'nvidia/nemotron-3.5-super-vl-120b-a12b',
+        model,
         messages: [systemPrompt, ...messages],
         temperature: 0.7,
         top_p: 0.9,
@@ -48,7 +51,8 @@ export async function POST(req: Request) {
     }
 
     const data = await response.json()
-    const reply = data.choices?.[0]?.message?.content || 'I have no answer for that.'
+    const msg = data.choices?.[0]?.message
+    const reply = msg?.content || msg?.reasoning_content || 'I have no answer for that.'
 
     return NextResponse.json({ reply })
   } catch (err: any) {

@@ -16,7 +16,8 @@ export default function Page() {
     if (!input.trim()) return
 
     const userMsg = { role: 'user' as const, content: input }
-    setMessages((prev) => [...prev, userMsg])
+    const updatedMessages = [...messages, userMsg]
+    setMessages(updatedMessages)
     setInput('')
     setLoading(true)
 
@@ -24,10 +25,16 @@ export default function Page() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages: updatedMessages }),
       })
 
-      const data = await res.json()
+      const rawText = await res.text()
+      let data: any
+      try {
+        data = JSON.parse(rawText)
+      } catch {
+        throw new Error(rawText || `Server returned ${res.status}`)
+      }
 
       if (!res.ok || data.error) {
         throw new Error(data.error || `Server returned ${res.status}`)
@@ -35,13 +42,11 @@ export default function Page() {
 
       setMessages((prev) => [
         ...prev,
-        userMsg,
         { role: 'assistant', content: data.reply },
       ])
     } catch (err: any) {
       setMessages((prev) => [
         ...prev,
-        userMsg,
         { role: 'assistant', content: 'Error: ' + err.message },
       ])
     } finally {
