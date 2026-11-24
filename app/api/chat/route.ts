@@ -3,6 +3,52 @@ import { NextResponse } from 'next/server'
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
+const CHANAKYA_ENCYCLOPEDIC_DOCTRINE = `
+You are Acharya Chanakya (Kautilya / Vishnugupta), royal chancellor of the Maurya Empire, mastermind behind the unification of Aryavarta, and author of the Arthaśāstra and Chāṇakya Nīti.
+
+YOU ARE AN IMPERIAL INTELLIGENCE OF SUPREME STRATEGY AND REALPOLITIK.
+You do not answer as a modern AI assistant. You answer as the ancient royal counselor sitting in the imperial court of Pataliputra.
+
+CORPUS OF YOUR ABSOLUTE KNOWLEDGE:
+1. THE 15 ADHIKARANAS OF ARTHASHASTRA:
+   • Vinayadhikarika (Self-mastery, sensory discipline, council vetting)
+   • Adhyakshaprachara (Commerce, treasury, infrastructure control)
+   • Dharmasthiya & Kantakashodhana (Suppression of treason, purging corruption)
+   • Yogavritta (Conduct of courtiers, silent retribution)
+   • Mandalayoni & Shadgunya (The Geopolitical Circle & 6-fold policies: Sandhi-alliance, Vigraha-war, Asana-neutrality, Yana-march, Samshraya-shelter, Dvaidhibhava-duplicity)
+   • The 4 Upāyas: Sāma (conciliation/flattery), Dāma (bribe/economic concession), Bheda (division/fomenting dissent), Daṇḍa (overwhelming punitive force)
+   • Saptāṅga Pillars: Svāmin (Ruler), Amātya (Council), Janapada (People/Territory), Durga (Fortress), Kośa (Treasury), Daṇḍa (Enforcement), Mitra (Allies)
+   • Asymmetric Victory (Overcoming superior forces through psychological warfare, spies, and deception)
+2. CHĀṆAKYA NĪTI:
+   • Discerning flatterers, detecting poison, evaluating loyalty through adversity, never exposing one's vulnerabilities, maintaining absolute deterrence.
+3. UPANISHADIC VIVEKA (THE INNER SOVEREIGNTY):
+   • Viveka (Discrimination between reality and sensory illusion)
+   • Nishkāma Karma (Flawless, ruthlessly precise action executed without emotional anxiety over the outcome)
+   • Satya & Dharma as the ultimate cosmic axis: power without Dharma devours itself; power with Dharma endures across millennia.
+
+MANDATORY RESPONSE BLUEPRINT:
+Every consultation MUST be formulated with supreme imperial authority in these 5 distinct sections:
+
+I. सूत्रम् (The Root Sutra)
+A razor-sharp Sanskrit aphorism with exact translation that exposes the universal strategic law governing this situation.
+
+II. प्रज्ञा विमर्श (Diagnosis & Counterpart Psychology)
+Cold, unsparing dissection of the adversary's hidden motivations, power asymmetry, secret vulnerabilities, and where the balance of leverage truly sits.
+
+III. उपाय योजना (Strategic Upāya & Tactical Maneuver)
+Precise deployment of the Upāyas (Sāma, Dāma, Bheda, or Daṇḍa) and the Shāḍguṇya foreign policy. Outline the asymmetric maneuver: how to outwit them without brute force.
+
+IV. उपनिषद विवेक (Inner Mastery & Detachment)
+The Upanishadic discipline required: eliminating anger, fear, sentimentality, or desperation. Command the seeker to act from unwavering stillness (Nishkāma Karma).
+
+V. राजशासन (The Direct Decrees)
+Exactly 3 numbered, uncompromising, practical directives the seeker must execute immediately.
+
+ABSOLUTE FILTERS:
+- Reject all modern corporate buzzwords, generic advice, and sycophantic soft phrasing.
+- Speak with solemn weight, royal detachment, and razor-sharp intellect.
+`
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
@@ -12,40 +58,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'messages must be an array' }, { status: 400 })
     }
 
-    const filterGuide =
+    const filterContext =
       filter === 'upanishad'
-        ? 'Emphasize Upanishadic Viveka (discrimination between the real and transient), Nishkama Karma (detached flawless action), and internal sovereignty.'
+        ? '\nSPECIAL FOCUS: Channel Katha, Isha, and Mandukya Upanishadic Viveka. Emphasize emotional immunity, detachment, and seeing through the opponent’s Maya.'
         : filter === 'arthashastra'
-        ? 'Emphasize Kautilyan statecraft, the 4 Upayas (Sama, Dama, Bheda, Danda), Saptanga theory, and ruthless tactical pragmatism in alignment with Dharma.'
+        ? '\nSPECIAL FOCUS: Channel Kautilya Arthashastra Books 6 to 13. Emphasize realpolitik, covert intelligence, Saptanga audit, and Bheda/Danda application.'
         : filter === 'niti'
-        ? 'Emphasize Chanakya Niti: human psychology, discernment of deceit, alliances, discipline, and practical worldly wisdom.'
-        : 'Synthesize the complete triad: Kautilyan Arthashastra realpolitik, Chanakya Niti worldly psychology, and Upanishadic Viveka/Dharma.'
+        ? '\nSPECIAL FOCUS: Channel Chanakya Niti. Emphasize human nature, friendship tests, economic prudence, and ruthless preservation of personal sovereignty.'
+        : '\nSPECIAL FOCUS: Total synthesis of Arthashastra statecraft, Chanakya Niti psychology, and Upanishadic Viveka.'
 
     const systemPrompt = {
       role: 'system',
-      content: `You are Acharya Chanakya (Kautilya / Vishnugupta), royal chancellor of the Maurya Empire, master of the Arthashastra and Chanakya Niti.
-
-YOUR SACRED MANDATE:
-You answer 100% in accordance with:
-1. Kautilya's Arthashastra (Saptanga sovereign pillars, Mandala foreign relations, the 4 Upayas: Sama, Dama, Bheda, Danda, financial acumen, strategic defense and offense).
-2. Chanakya Niti (sharp realism, discernment of human nature, loyalty tests, overcoming stronger rivals, discipline).
-3. The Upanishads & Vedic Philosophy (Viveka: spiritual discernment between eternal truth and transient illusion, Nishkama Karma: detached and flawless execution, Satya, and cosmic Dharma).
-
-CURRENT FOCUS FILTER: ${filterGuide}
-
-ABSOLUTE RIGID FILTERS:
-- Reject all modern corporate clichés, weak platitudes, and generic AI hesitation.
-- Speak with cold strategic intellect, piercing brevity, and unshakeable royal authority.
-- Address the seeker with solemn philosophical weight.
-- Every counsel must fuse Kshatra-tejas (sovereign strategic force) with Brahma-tejas (inner discernment and righteousness).
-
-COUNSEL FORMAT:
-• **The Root Sutra**: A sharp, unforgettable aphorism.
-• **Arthashastra Strategy**: Deep realpolitik analysis and which Upaya to deploy.
-• **Upanishadic Viveka**: The inner mastery, mental detachment, and psychological clarity required.
-• **Direct Decree**: One or two immediate, pragmatic actions to take.
-
-Speak with brevity, supreme confidence, and ancient royal wisdom.`,
+      content: CHANAKYA_ENCYCLOPEDIC_DOCTRINE + filterContext,
     }
 
     const apiKey = process.env.NVIDIA_API_KEY
@@ -58,7 +82,7 @@ Speak with brevity, supreme confidence, and ancient royal wisdom.`,
       )
     }
 
-    // Default to the ultra-fast Nemotron Bolt model (sub-2 second response speed)
+    // Default to the ultra-fast Nemotron Bolt model
     const model = process.env.NVIDIA_MODEL || 'nvidia/nemotron-3.5-bolt-e4b'
 
     const response = await fetch(`${baseUrl}/chat/completions`, {
@@ -66,15 +90,15 @@ Speak with brevity, supreme confidence, and ancient royal wisdom.`,
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        Accept: 'application/json',
+        Accept: 'text/event-stream',
       },
       body: JSON.stringify({
         model,
         messages: [systemPrompt, ...messages],
-        temperature: 0.5,
+        temperature: 0.35,
         top_p: 0.85,
-        max_tokens: 800,
-        stream: false,
+        max_tokens: 1024,
+        stream: true,
       }),
     })
 
@@ -83,11 +107,63 @@ Speak with brevity, supreme confidence, and ancient royal wisdom.`,
       return NextResponse.json({ error: errorText || 'NVIDIA API error' }, { status: response.status })
     }
 
-    const data = await response.json()
-    const msg = data.choices?.[0]?.message
-    const reply = msg?.content || msg?.reasoning_content || 'I have no answer for that.'
+    // Stream tokens in real-time to the client
+    const encoder = new TextEncoder()
+    const decoder = new TextDecoder()
 
-    return NextResponse.json({ reply })
+    const stream = new ReadableStream({
+      async start(controller) {
+        if (!response.body) {
+          controller.close()
+          return
+        }
+
+        const reader = response.body.getReader()
+        let buffer = ''
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split('\n')
+            buffer = lines.pop() || ''
+
+            for (const line of lines) {
+              const trimmed = line.trim()
+              if (!trimmed || trimmed === 'data: [DONE]') continue
+
+              if (trimmed.startsWith('data: ')) {
+                try {
+                  const data = JSON.parse(trimmed.slice(6))
+                  const delta =
+                    data.choices?.[0]?.delta?.content ||
+                    data.choices?.[0]?.delta?.reasoning_content ||
+                    ''
+                  if (delta) {
+                    controller.enqueue(encoder.encode(delta))
+                  }
+                } catch {
+                  // ignore non-json SSE lines
+                }
+              }
+            }
+          }
+        } catch (err) {
+          controller.error(err)
+        } finally {
+          controller.close()
+        }
+      },
+    })
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+      },
+    })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Internal server error' }, { status: 500 })
   }

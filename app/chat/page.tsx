@@ -13,32 +13,44 @@ interface Message {
 }
 
 const FILTER_TABS = [
-  { id: 'all', label: '✦ Complete Synthesis', desc: 'Arthashastra + Chanakya Niti + Upanishads' },
-  { id: 'arthashastra', label: '⚔️ Arthashastra Realpolitik', desc: 'Statecraft, 4 Upayas & Strategy' },
-  { id: 'niti', label: '📜 Chanakya Niti', desc: 'Human Psychology & Discerning Allies' },
-  { id: 'upanishad', label: '🕉️ Upanishadic Viveka', desc: 'Detachment, Dharma & Inner Sovereignty' },
+  { id: 'all', label: '✦ All Treatises (Supreme Synthesis)', desc: 'Arthashastra + Chanakya Niti + Upanishadic Viveka' },
+  { id: 'arthashastra', label: '⚔️ Arthashastra Realpolitik', desc: '15 Books of Kautilya, Saptanga & 4 Upayas' },
+  { id: 'niti', label: '📜 Chanakya Niti', desc: 'Human Psychology, Deceit, and Deterrence' },
+  { id: 'upanishad', label: '🕉️ Upanishadic Viveka', desc: 'Detachment (Nishkama Karma) & Inner Sovereignty' },
 ]
 
-const QUICK_COUNSEL_PROMPTS = [
-  'How to negotiate when the adversary holds 90% of the leverage?',
-  'What are the 4 Upayas (Sama, Dama, Bheda, Danda) and how should I apply them?',
-  'How do I identify deceit and test the true loyalty of ministers or allies?',
-  'Explain the Upanishadic concept of Viveka (discernment) in worldly decision making.',
+const STRATEGIC_INQUIRIES = [
+  'My business partner is secretly negotiating behind my back with our competitor. What should I do?',
+  'How to negotiate when the adversary holds 90% of the leverage and resources?',
+  'What are the 4 Upayas (Sama, Dama, Bheda, Danda) and how should I apply them in conflict?',
+  'How do I detect deceit, espionage, and test the true loyalty of ministers or allies?',
+  'Explain the Upanishadic concept of Viveka (discernment) in high-stakes decisions.',
   'How should a leader overcome betrayal without succumbing to emotional weakness?',
-  'What does the Arthashastra teach about managing capital, treasury, and resources?',
 ]
 
 function FormattedContent({ content }: { content: string }) {
   const lines = content.split('\n')
 
   return (
-    <div className="space-y-2.5 text-[#1E2033] leading-relaxed text-[15px]">
+    <div className="space-y-3 text-[#1E2033] leading-relaxed text-[15px]">
       {lines.map((line, idx) => {
         const trimmed = line.trim()
         if (!trimmed) {
           return <div key={idx} className="h-1.5" />
         }
 
+        // Roman numeral section headers (I. सूत्रम्, II. प्रज्ञा विमर्श, etc.)
+        if (/^(I|II|III|IV|V)\.\s+/.test(trimmed)) {
+          return (
+            <div key={idx} className="pt-2 pb-1 border-b border-[#F0F1F5]">
+              <span className="font-serif text-base sm:text-lg font-bold text-[#D5650F] tracking-wide block">
+                {trimmed}
+              </span>
+            </div>
+          )
+        }
+
+        // Blockquotes
         if (trimmed.startsWith('>')) {
           return (
             <blockquote
@@ -50,6 +62,7 @@ function FormattedContent({ content }: { content: string }) {
           )
         }
 
+        // Bullet points
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || trimmed.startsWith('• ')) {
           const bulletText = trimmed.replace(/^[-*•]\s*/, '')
           return (
@@ -60,6 +73,7 @@ function FormattedContent({ content }: { content: string }) {
           )
         }
 
+        // Numbered list
         const matchNumber = trimmed.match(/^(\d+)\.\s+(.*)/)
         if (matchNumber) {
           return (
@@ -102,6 +116,16 @@ function ChatContent() {
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
   const endRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const hasAutoFired = useRef(false)
+
+  // Auto-fire prompt from query params if present
+  useEffect(() => {
+    const urlPrompt = searchParams.get('prompt')
+    if (urlPrompt && !hasAutoFired.current && messages.length === 0) {
+      hasAutoFired.current = true
+      handleSend(urlPrompt)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -129,6 +153,18 @@ function ChatContent() {
 
     const t0 = performance.now()
 
+    // Add empty assistant placeholder for real-time streaming
+    const assistantIndex = updatedMessages.length
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'assistant',
+        content: '',
+        timestamp: now,
+        latency: '⚡ streaming...',
+      },
+    ])
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -136,39 +172,52 @@ function ChatContent() {
         body: JSON.stringify({ messages: updatedMessages, filter }),
       })
 
-      const rawText = await res.text()
-      let data: any
-      try {
-        data = JSON.parse(rawText)
-      } catch {
-        throw new Error(rawText || `Server returned ${res.status}`)
+      if (!res.ok) {
+        const errText = await res.text()
+        throw new Error(errText || `Server returned ${res.status}`)
       }
 
-      if (!res.ok || data.error) {
-        throw new Error(data.error || `Server returned ${res.status}`)
+      const reader = res.body?.getReader()
+      if (!reader) {
+        throw new Error('Streaming connection failed')
       }
 
-      const t1 = performance.now()
-      const latencySec = ((t1 - t0) / 1000).toFixed(1)
+      const decoder = new TextDecoder()
+      let accumulatedReply = ''
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: data.reply,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          latency: `${latencySec}s flash`,
-        },
-      ])
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value, { stream: true })
+        accumulatedReply += chunk
+
+        const currentLatency = ((performance.now() - t0) / 1000).toFixed(1)
+
+        setMessages((prev) => {
+          const next = [...prev]
+          if (next[assistantIndex]) {
+            next[assistantIndex] = {
+              ...next[assistantIndex],
+              content: accumulatedReply,
+              latency: `${currentLatency}s flash`,
+            }
+          }
+          return next
+        })
+      }
     } catch (err: any) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: `⚠️ Counsel interrupted: ${err.message}`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ])
+      setMessages((prev) => {
+        const next = [...prev]
+        if (next[assistantIndex]) {
+          next[assistantIndex] = {
+            ...next[assistantIndex],
+            content: `⚠️ Counsel interrupted: ${err.message}`,
+            latency: 'Error',
+          }
+        }
+        return next
+      })
     } finally {
       setLoading(false)
     }
@@ -224,25 +273,23 @@ function ChatContent() {
       <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-6 z-10 pb-36">
         {messages.length === 0 ? (
           <div className="py-8 sm:py-12 flex flex-col items-center text-center animate-fadeIn">
-            {/* Cultural Seal */}
             <div className="w-16 h-16 rounded-full bg-[#FFF8F3] border border-[#D5650F]/30 flex items-center justify-center text-[#D5650F] text-2xl font-serif font-bold mb-4 shadow-sm">
               चा
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-serif font-normal text-[#1E2033]">
-              Ask Chanakya Anything
+              Imperial Counsel of Acharya Chanakya
             </h1>
-            <p className="max-w-lg text-[#585C7B] text-xs sm:text-sm mt-2 leading-relaxed">
-              Every counsel strictly conforms to the <strong className="text-[#1E2033]">Arthashastra</strong>, <strong className="text-[#1E2033]">Chanakya Niti</strong>, and <strong className="text-[#1E2033]">Upanishadic Viveka</strong>. Formulated in seconds via sovereign NVIDIA NIM.
+            <p className="max-w-xl text-[#585C7B] text-xs sm:text-sm mt-2 leading-relaxed">
+              Every inquiry is dissected through the <strong className="text-[#1E2033]">15 Adhikaranas of the Arthashastra</strong>, the <strong className="text-[#1E2033]">4 Upayas</strong>, and <strong className="text-[#1E2033]">Upanishadic Viveka</strong>. Streamed token-by-token with sub-second real-time inference.
             </p>
 
-            {/* Quick Prompt Chips */}
             <div className="mt-8 w-full max-w-2xl text-left space-y-2">
               <div className="text-[11px] font-semibold text-[#8F92A9] uppercase tracking-wider px-1">
-                Strategic Inquiries
+                Strategic Dilemmas to Consult
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {QUICK_COUNSEL_PROMPTS.map((prompt, i) => (
+                {STRATEGIC_INQUIRIES.map((prompt, i) => (
                   <button
                     key={i}
                     onClick={() => handleSend(prompt)}
@@ -293,12 +340,19 @@ function ChatContent() {
                 }`}
               >
                 {m.role === 'assistant' ? (
-                  <FormattedContent content={m.content} />
+                  m.content ? (
+                    <FormattedContent content={m.content} />
+                  ) : (
+                    <div className="flex items-center gap-2 text-sm text-[#585C7B] italic">
+                      <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-ping" />
+                      <span>Scanning imperial treatises...</span>
+                    </div>
+                  )
                 ) : (
                   <p className="whitespace-pre-wrap leading-relaxed text-[15px]">{m.content}</p>
                 )}
 
-                {m.role === 'assistant' && (
+                {m.role === 'assistant' && m.content && (
                   <div className="mt-4 pt-2.5 border-t border-[#F0F1F5] flex items-center justify-between text-xs text-[#8F92A9]">
                     <span className="text-[11px] text-[#A6A8BC] font-serif">
                       100% Arthashastra & Upanishadic Filter Applied
@@ -328,28 +382,6 @@ function ChatContent() {
               </div>
             </div>
           ))
-        )}
-
-        {loading && (
-          <div className="flex flex-col items-start animate-fadeIn">
-            <div className="flex items-center gap-2 mb-1.5 px-2 text-xs text-[#585C7B]">
-              <div className="w-5 h-5 rounded-full bg-[#D5650F] text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
-                चा
-              </div>
-              <span className="font-semibold text-[#1E2033]">Chanakya</span>
-              <span className="text-[#8F92A9]">is formulating strategy...</span>
-            </div>
-            <div className="px-5 py-4 rounded-3xl bg-white border border-[#E6E6E6] rounded-tl-sm flex items-center gap-3 shadow-[0_2px_12px_rgba(30,32,51,0.04)]">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-bounce" />
-                <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-bounce [animation-delay:0.15s]" />
-                <span className="w-2 h-2 rounded-full bg-[#D5650F] animate-bounce [animation-delay:0.3s]" />
-              </div>
-              <span className="text-sm text-[#585C7B] font-serif italic">
-                Scanning Arthashastra treatises with flash inference...
-              </span>
-            </div>
-          </div>
         )}
 
         <div ref={endRef} />
@@ -388,7 +420,7 @@ function ChatContent() {
 
             <div className="mt-1 px-3 pb-0.5 flex items-center justify-between text-[11px] text-[#8F92A9]">
               <span>Filter: <strong className="text-[#1E2033] uppercase">{filter}</strong> · Enter ↵ to submit</span>
-              <span className="hidden sm:inline">Flash response speed &lt;2s</span>
+              <span className="hidden sm:inline">⚡ Real-time Token Streaming Active</span>
             </div>
           </div>
         </div>
