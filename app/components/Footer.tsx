@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Chakra, IconArrowUpRight } from './Icons'
+import { IconArrowUpRight } from './Icons'
 
 const COLUMNS = [
   {
@@ -47,7 +47,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-5">
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2.5">
-              <Chakra width={28} height={28} />
+              <img
+                src="/logo.svg"
+                alt="Vedhh AI"
+                width={36}
+                height={36}
+                className="h-9 w-9 rounded-2xl"
+              />
               <span className="font-serif text-2xl leading-none tracking-tight text-ink">
                 vedhh <span className="text-ink-faint">ai</span>
               </span>

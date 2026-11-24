@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../../lib/AuthContext'
 import ThemeToggle from './ThemeToggle'
 import {
-  Chakra,
   IconArrowUpRight,
   IconBolt,
   IconClose,
@@ -109,8 +108,14 @@ export default function Navbar() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           {/* Brand */}
           <Link href="/" className="group flex items-center gap-2.5" aria-label="Vedhh AI home">
-            <span className="text-ink transition-transform duration-500 ease-expo group-hover:rotate-180">
-              <Chakra width={26} height={26} />
+            <span className="block transition-transform duration-500 ease-expo group-hover:scale-105 group-hover:-rotate-3">
+              <img
+                src="/logo.svg"
+                alt="Vedhh AI"
+                width={34}
+                height={34}
+                className="h-9 w-9 rounded-2xl"
+              />
             </span>
             <span className="flex items-baseline gap-1.5">
               <span className="font-serif text-[22px] leading-none tracking-tight text-ink">
