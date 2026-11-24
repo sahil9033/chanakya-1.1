@@ -3,7 +3,9 @@
 import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 import SignInGate from '../components/SignInGate'
+import Reveal from '../components/Reveal'
 import {
   Chakra,
   IconArrowRight,
@@ -138,7 +140,7 @@ function ChatContent() {
   }, [searchParams])
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
+    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, loading])
 
   useEffect(() => {
@@ -225,7 +227,37 @@ function ChatContent() {
   }
 
   return (
-    <>
+    <main className="flex flex-1 flex-col">
+      {/* Header */}
+      <section className="relative isolate overflow-hidden border-b border-ink-line">
+        <div className="mesh" aria-hidden="true">
+          <span className="mesh-layer mesh-a" />
+          <span className="mesh-layer mesh-c" />
+        </div>
+        <div className="relative mx-auto max-w-3xl px-4 py-12 text-center sm:py-16">
+          <Reveal className="flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              Streamed counsel · Arthashastra
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-6 text-balance font-serif text-5xl leading-[1.03] tracking-tightest text-ink sm:text-6xl">
+              Ask <em className="italic text-accent-deep">Chanakya</em>
+            </h1>
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-soft">
+              Every inquiry is dissected through the{' '}
+              <strong className="font-medium text-ink">15 Adhikaraṇas</strong>, the{' '}
+              <strong className="font-medium text-ink">4 Upāyas</strong> and{' '}
+              <strong className="font-medium text-ink">Upaniṣadic Viveka</strong> — streamed token
+              by token.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
       {/* Filter rail */}
       <div className="sticky top-16 z-30 border-b border-ink-line bg-canvas/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
@@ -257,7 +289,7 @@ function ChatContent() {
                     setMessages([])
                     setConfirmReset(false)
                   }}
-                  className="whitespace-nowrap rounded-full bg-ink px-3 py-1.5 text-xs font-medium text-white"
+                  className="whitespace-nowrap rounded-full bg-ink px-3 py-1.5 text-xs font-medium text-canvas"
                 >
                   Confirm
                 </button>
@@ -282,37 +314,22 @@ function ChatContent() {
       </div>
 
       {/* Conversation */}
-      <main className="mx-auto w-full max-w-4xl flex-1 space-y-7 px-4 py-8 pb-44 sm:px-6">
+      <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center py-10 text-center animate-fade-in sm:py-16">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-ink-line bg-cream text-ink">
-              <span className="animate-float-slow">
-                <Chakra width={30} height={30} />
-              </span>
-            </span>
-
-            <h1 className="mt-6 font-serif text-3xl tracking-tight text-ink sm:text-4xl">
-              The imperial counsel of Acharya Chanakya
-            </h1>
-            <p className="mt-3 max-w-xl text-pretty text-sm leading-relaxed text-ink-soft">
-              Every inquiry is dissected through the{' '}
-              <strong className="font-medium text-ink">15 Adhikaraṇas</strong>, the{' '}
-              <strong className="font-medium text-ink">4 Upāyas</strong> and{' '}
-              <strong className="font-medium text-ink">Upaniṣadic Viveka</strong> — streamed token
-              by token.
-            </p>
-
-            <div className="mt-10 w-full max-w-2xl space-y-3 text-left">
-              <div className="px-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+          <div className="py-2">
+            <Reveal>
+              <div className="flex items-center gap-2 px-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+                <span className="h-1 w-1 rounded-full bg-accent" />
                 Strategic dilemmas to consult
               </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {STRATEGIC_INQUIRIES.map((prompt) => (
+            </Reveal>
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {STRATEGIC_INQUIRIES.map((prompt, i) => (
+                <Reveal key={prompt} delay={i * 55} className="h-full">
                   <button
-                    key={prompt}
                     type="button"
                     onClick={() => handleSend(prompt)}
-                    className="spot group flex items-start gap-2.5 rounded-2xl border border-ink-line bg-canvas p-4 text-left text-xs leading-snug text-ink-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-soft"
+                    className="spot group flex h-full w-full items-start gap-2.5 rounded-2xl border border-ink-line bg-canvas p-4 text-left text-xs leading-snug text-ink-soft transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-soft"
                   >
                     <IconArrowRight
                       width={15}
@@ -321,105 +338,107 @@ function ChatContent() {
                     />
                     <span className="group-hover:text-ink">{prompt}</span>
                   </button>
-                ))}
-              </div>
+                </Reveal>
+              ))}
             </div>
           </div>
         ) : (
-          messages.map((m, i) => {
-            const isUser = m.role === 'user'
-            return (
-              <div
-                key={i}
-                className={`flex flex-col animate-fade-in ${isUser ? 'items-end' : 'items-start'}`}
-              >
-                <div className="mb-2 flex items-center gap-2 px-1 text-xs text-ink-faint">
-                  {!isUser && (
-                    <>
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
-                        <Chakra width={13} height={13} />
-                      </span>
-                      <span className="font-medium text-ink">Acharya Chanakya</span>
-                      {m.latency && (
-                        <span
-                          className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] ${
-                            m.latency === 'error'
-                              ? 'border-rose-200 bg-rose-50 text-rose-700'
-                              : 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                          }`}
-                        >
-                          {m.latency !== 'error' && <IconBolt width={10} height={10} />}
-                          {m.latency === 'streaming' ? 'streaming' : m.latency}
-                        </span>
-                      )}
-                    </>
-                  )}
-                  {isUser && <span className="font-medium text-ink-soft">You</span>}
-                  {m.timestamp && <span className="text-[11px] text-ink-faint">· {m.timestamp}</span>}
-                </div>
-
+          <div className="space-y-7">
+            {messages.map((m, i) => {
+              const isUser = m.role === 'user'
+              return (
                 <div
-                  className={`max-w-[92%] rounded-3xl px-5 py-4 shadow-sm sm:max-w-[85%] sm:px-6 ${
-                    isUser
-                      ? 'rounded-tr-lg bg-ink text-white'
-                      : 'rounded-tl-lg border border-ink-line bg-canvas'
-                  }`}
+                  key={i}
+                  className={`flex flex-col animate-fade-in ${isUser ? 'items-end' : 'items-start'}`}
                 >
-                  {isUser ? (
-                    <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{m.content}</p>
-                  ) : m.content ? (
-                    <FormattedContent content={m.content} />
-                  ) : (
-                    <div className="flex items-center gap-2.5 text-sm text-ink-soft">
-                      <span className="flex gap-1">
-                        {[0, 150, 300].map((d) => (
+                  <div className="mb-2 flex items-center gap-2 px-1 text-xs text-ink-faint">
+                    {!isUser && (
+                      <>
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
+                          <Chakra width={13} height={13} />
+                        </span>
+                        <span className="font-medium text-ink">Acharya Chanakya</span>
+                        {m.latency && (
                           <span
-                            key={d}
-                            className="h-1.5 w-1.5 animate-dot-bounce rounded-full bg-accent"
-                            style={{ animationDelay: `${d}ms` }}
-                          />
-                        ))}
-                      </span>
-                      <span>Consulting the treatises…</span>
-                    </div>
-                  )}
-
-                  {!isUser && m.content && (
-                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-ink-line pt-3">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] text-ink-faint">
-                        <IconCheck width={12} height={12} className="text-accent-deep" />
-                        Arthashastra &amp; Upaniṣadic filter applied
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard(m.content, i)}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-cream px-2.5 py-1 text-[11px] text-ink-soft transition-colors hover:text-ink"
-                      >
-                        {copiedIdx === i ? (
-                          <>
-                            <IconCheck width={13} height={13} className="text-emerald-600" />
-                            Copied
-                          </>
-                        ) : (
-                          <>
-                            <IconCopy width={13} height={13} />
-                            Copy
-                          </>
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] ${
+                              m.latency === 'error'
+                                ? 'border-accent/30 bg-accent-tint text-accent-deep'
+                                : 'border-ink-line bg-cream text-ink-soft'
+                            }`}
+                          >
+                            {m.latency !== 'error' && <IconBolt width={10} height={10} />}
+                            {m.latency === 'streaming' ? 'streaming' : m.latency}
+                          </span>
                         )}
-                      </button>
-                    </div>
-                  )}
+                      </>
+                    )}
+                    {isUser && <span className="font-medium text-ink-soft">You</span>}
+                    {m.timestamp && <span className="text-[11px] text-ink-faint">· {m.timestamp}</span>}
+                  </div>
+
+                  <div
+                    className={`max-w-[92%] rounded-3xl px-5 py-4 shadow-sm sm:max-w-[85%] sm:px-6 ${
+                      isUser
+                        ? 'rounded-tr-lg bg-ink text-canvas'
+                        : 'rounded-tl-lg border border-ink-line bg-canvas'
+                    }`}
+                  >
+                    {isUser ? (
+                      <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{m.content}</p>
+                    ) : m.content ? (
+                      <FormattedContent content={m.content} />
+                    ) : (
+                      <div className="flex items-center gap-2.5 text-sm text-ink-soft">
+                        <span className="flex gap-1">
+                          {[0, 150, 300].map((d) => (
+                            <span
+                              key={d}
+                              className="h-1.5 w-1.5 animate-dot-bounce rounded-full bg-accent"
+                              style={{ animationDelay: `${d}ms` }}
+                            />
+                          ))}
+                        </span>
+                        <span>Consulting the treatises…</span>
+                      </div>
+                    )}
+
+                    {!isUser && m.content && (
+                      <div className="mt-4 flex items-center justify-between gap-3 border-t border-ink-line pt-3">
+                        <span className="inline-flex items-center gap-1.5 text-[11px] text-ink-faint">
+                          <IconCheck width={12} height={12} className="text-accent-deep" />
+                          Arthashastra &amp; Upaniṣadic filter applied
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => copyToClipboard(m.content, i)}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-cream px-2.5 py-1 text-[11px] text-ink-soft transition-colors hover:text-ink"
+                        >
+                          {copiedIdx === i ? (
+                            <>
+                              <IconCheck width={13} height={13} className="text-accent-deep" />
+                              Copied
+                            </>
+                          ) : (
+                            <>
+                              <IconCopy width={13} height={13} />
+                              Copy
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )
-          })
+              )
+            })}
+          </div>
         )}
 
-        <div ref={endRef} />
-      </main>
+        <div ref={endRef} className="scroll-mb-40" />
+      </div>
 
-      {/* Input dock */}
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-4 sm:p-6">
+      {/* Composer */}
+      <div className="pointer-events-none sticky bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-4 sm:p-6">
         <div className="pointer-events-auto mx-auto w-full max-w-3xl">
           <div className="rounded-3xl border border-ink-line bg-canvas/90 p-2 shadow-soft backdrop-blur-xl transition-all duration-300 focus-within:border-accent/45 focus-within:shadow-glow sm:p-2.5">
             <div className="flex items-end gap-2 px-1">
@@ -442,7 +461,7 @@ function ChatContent() {
                 type="button"
                 onClick={() => handleSend()}
                 disabled={loading || !input.trim()}
-                className="flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-xs font-medium text-white shadow-sm transition-all duration-200 hover:shadow-lift disabled:pointer-events-none disabled:opacity-25 sm:text-sm"
+                className="flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-xs font-medium text-canvas shadow-sm transition-all duration-200 hover:shadow-lift disabled:pointer-events-none disabled:opacity-25 sm:text-sm"
               >
                 <IconSend width={15} height={15} />
                 Ask
@@ -454,14 +473,14 @@ function ChatContent() {
                 Enter ↵ to send
               </span>
               <span className="hidden items-center gap-1.5 sm:flex">
-                <span className="h-1 w-1 rounded-full bg-emerald-500" />
+                <span className="h-1 w-1 rounded-full bg-accent" />
                 Real-time streaming
               </span>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </main>
   )
 }
 
@@ -480,6 +499,7 @@ export default function ChatPage() {
           <ChatContent />
         </Suspense>
       </SignInGate>
+      <Footer />
     </div>
   )
 }

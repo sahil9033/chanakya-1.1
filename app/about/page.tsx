@@ -123,7 +123,7 @@ export default function AboutPage() {
                   href="https://www.linkedin.com/in/sahil-dadaso-patil/"
                   target="_blank"
                   rel="noreferrer"
-                  className="group mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:shadow-lift"
+                  className="group mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-all duration-300 hover:shadow-lift"
                 >
                   <IconLinkedIn width={16} height={16} />
                   Connect on LinkedIn

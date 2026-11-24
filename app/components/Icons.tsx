@@ -194,6 +194,26 @@ export const IconLock = (p: IconProps) => (
   </Base>
 )
 
+export const IconSun = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2" />
+    <path d="M12 20v2" />
+    <path d="M4.9 4.9 6.3 6.3" />
+    <path d="M17.7 17.7l1.4 1.4" />
+    <path d="M2 12h2" />
+    <path d="M20 12h2" />
+    <path d="M4.9 19.1 6.3 17.7" />
+    <path d="M17.7 6.3 19.1 4.9" />
+  </Base>
+)
+
+export const IconMoon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.75 6.75 0 0 0 10.5 10.5Z" />
+  </Base>
+)
+
 export const IconSend = (p: IconProps) => (
   <Base {...p}>
     <path d="M4 12 20 4l-8 16-2-6-6-2Z" />

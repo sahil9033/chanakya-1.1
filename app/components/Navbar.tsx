@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../../lib/AuthContext'
+import ThemeToggle from './ThemeToggle'
 import {
   Chakra,
   IconArrowUpRight,
@@ -99,20 +100,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Announcement bar — scrolls away */}
-      <div className="relative z-40 bg-ink text-white/85">
-        <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-2 text-center text-[11px] sm:text-xs">
-          <span className="hidden h-1 w-1 rounded-full bg-accent sm:block" />
-          <span>
-            Vedic astrology &amp; <strong className="font-medium text-white">Kundali AI</strong>
-            <span className="mx-2 hidden text-white/30 sm:inline">·</span>
-            <span className="hidden sm:inline">
-              Deterministic sidereal charts, interpreted by AI
-            </span>
-          </span>
-        </div>
-      </div>
-
       {/* Sticky navigation */}
       <header
         className={`sticky top-0 z-40 border-b transition-colors duration-300 ${
@@ -167,13 +154,14 @@ export default function Navbar() {
 
             <Link
               href="/chat"
-              className="group hidden items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-[13px] font-medium text-white shadow-sm transition-all duration-300 hover:bg-[#262833] hover:shadow-lift sm:inline-flex"
+              className="group hidden items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-[13px] font-medium text-canvas shadow-sm transition-all duration-300 hover:opacity-90 hover:shadow-lift sm:inline-flex"
             >
               <IconBolt width={15} height={15} className="text-accent" />
               Ask Chanakya
             </Link>
 
             {/* Account */}
+            <ThemeToggle />
             {!loading &&
               (user ? (
                 <div className="relative" ref={menuRef}>
@@ -184,7 +172,7 @@ export default function Navbar() {
                     aria-expanded={menuOpen}
                     className="flex h-9 items-center gap-2 rounded-full border border-ink-line bg-canvas p-0.5 pr-2.5 transition-colors hover:bg-cream"
                   >
-                    <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-ink text-[13px] font-medium text-white">
+                    <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-ink text-[13px] font-medium text-canvas">
                       {user.photoURL ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -279,7 +267,7 @@ export default function Navbar() {
             })}
             <Link
               href="/chat"
-              className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-ink px-4 py-3 text-sm font-medium text-white"
+              className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-ink px-4 py-3 text-sm font-medium text-canvas"
             >
               <IconBolt width={15} height={15} className="text-accent" />
               Ask Chanakya
@@ -296,7 +284,7 @@ export default function Navbar() {
                   className="mt-1 flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-ink-soft transition-colors hover:bg-cream/70 hover:text-ink"
                 >
                   <span className="flex min-w-0 items-center gap-2.5">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-medium text-white">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-medium text-canvas">
                       {(user.displayName?.[0] ?? user.email?.[0] ?? 'C').toUpperCase()}
                     </span>
                     <span className="truncate">{user.displayName ?? user.email}</span>

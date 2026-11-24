@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,18 +9,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Every token is driven by a CSS variable so the whole site can flip
+        // between the light editorial theme and its dark counterpart.
         ink: {
-          DEFAULT: '#16171D',
-          soft: '#5A5D6B',
-          faint: '#8C8F9B',
-          line: '#EAE8E3',
+          DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+          soft: 'rgb(var(--ink-soft) / <alpha-value>)',
+          faint: 'rgb(var(--ink-faint) / <alpha-value>)',
+          line: 'rgb(var(--ink-line) / <alpha-value>)',
         },
-        canvas: '#FFFFFF',
-        cream: '#FAF8F4',
+        canvas: 'rgb(var(--canvas) / <alpha-value>)',
+        cream: 'rgb(var(--cream) / <alpha-value>)',
         accent: {
-          DEFAULT: '#FF6A2B',
-          deep: '#B0450B',
-          tint: '#FFF4ED',
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          deep: 'rgb(var(--accent-deep) / <alpha-value>)',
+          tint: 'rgb(var(--accent-tint) / <alpha-value>)',
         },
       },
       fontFamily: {
@@ -30,10 +33,10 @@ module.exports = {
         tightest: '-0.03em',
       },
       boxShadow: {
-        xs: '0 1px 2px rgba(22,23,29,0.05)',
-        soft: '0 1px 2px rgba(22,23,29,0.04), 0 10px 30px -12px rgba(22,23,29,0.12)',
-        lift: '0 2px 4px rgba(22,23,29,0.04), 0 28px 60px -20px rgba(22,23,29,0.22)',
-        glow: '0 0 0 1px rgba(255,106,43,0.16), 0 18px 50px -18px rgba(255,106,43,0.45)',
+        xs: 'var(--shadow-xs)',
+        soft: 'var(--shadow-soft)',
+        lift: 'var(--shadow-lift)',
+        glow: 'var(--shadow-glow)',
       },
       transitionTimingFunction: {
         expo: 'cubic-bezier(0.16, 1, 0.3, 1)',

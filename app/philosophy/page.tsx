@@ -89,7 +89,7 @@ export default function PhilosophyPage() {
             <div className="mt-9 flex justify-center">
               <Link
                 href="/chat?filter=upanishad"
-                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-lift"
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-canvas shadow-sm transition-all duration-300 hover:shadow-lift"
               >
                 <IconBolt width={16} height={16} className="text-accent" />
                 Consult with the Upaniṣadic filter
@@ -153,22 +153,22 @@ export default function PhilosophyPage() {
             <span className="mesh-layer mesh-a opacity-35" />
           </div>
           <div className="relative">
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5 text-accent">
+            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-canvas/20 bg-canvas/5 text-accent">
               <span className="animate-float-slow">
                 <Chakra width={28} height={28} />
               </span>
             </span>
-            <h2 className="mx-auto mt-7 max-w-2xl font-serif text-4xl leading-[1.06] tracking-tight text-white sm:text-5xl">
+            <h2 className="mx-auto mt-7 max-w-2xl font-serif text-4xl leading-[1.06] tracking-tight text-canvas sm:text-5xl">
               Master yourself before you rule
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-pretty text-sm leading-relaxed text-white/60 sm:text-base">
+            <p className="mx-auto mt-5 max-w-xl text-pretty text-sm leading-relaxed text-canvas/60 sm:text-base">
               He who has not overcome his own senses cannot govern his counsellors; he who cannot
               govern his counsellors cannot protect his empire.
             </p>
             <div className="mt-9 flex justify-center">
               <Link
                 href="/chat"
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-ink transition-all duration-300 hover:shadow-glow"
+                className="group inline-flex items-center gap-2 rounded-full bg-canvas px-6 py-3 text-sm font-medium text-ink transition-all duration-300 hover:shadow-glow"
               >
                 <IconBolt width={16} height={16} className="text-accent" />
                 Ask Chanakya everything

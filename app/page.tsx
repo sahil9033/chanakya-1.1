@@ -300,7 +300,7 @@ export default function HomePage() {
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/astrology"
-                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-lift"
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-canvas shadow-sm transition-all duration-300 hover:shadow-lift"
               >
                 <IconCompass width={16} height={16} className="text-accent" />
                 Generate your Kundali
@@ -340,7 +340,7 @@ export default function HomePage() {
                 />
                 <button
                   type="submit"
-                  className="group inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-ink px-5 py-2.5 text-xs font-medium text-white transition-all duration-300 hover:shadow-lift sm:text-sm"
+                  className="group inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-ink px-5 py-2.5 text-xs font-medium text-canvas transition-all duration-300 hover:shadow-lift sm:text-sm"
                 >
                   Consult
                   <IconArrowRight
@@ -511,7 +511,7 @@ export default function HomePage() {
                 </p>
                 <Link
                   href="/chat?filter=arthashastra"
-                  className="group mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:shadow-lift"
+                  className="group mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-all duration-300 hover:shadow-lift"
                 >
                   Ask Chanakya about the Upāyas
                   <IconArrowRight
@@ -559,22 +559,22 @@ export default function HomePage() {
             <span className="mesh-layer mesh-b opacity-40" />
           </div>
           <div className="relative">
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5 text-accent">
+            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-canvas/20 bg-canvas/5 text-accent">
               <span className="animate-float-slow">
                 <Chakra width={28} height={28} />
               </span>
             </span>
-            <h2 className="mx-auto mt-7 max-w-2xl font-serif text-4xl leading-[1.06] tracking-tight text-white sm:text-5xl">
+            <h2 className="mx-auto mt-7 max-w-2xl font-serif text-4xl leading-[1.06] tracking-tight text-canvas sm:text-5xl">
               Take counsel from history&apos;s greatest chancellor
             </h2>
-            <p className="mx-auto mt-5 max-w-lg text-pretty text-sm leading-relaxed text-white/60 sm:text-base">
+            <p className="mx-auto mt-5 max-w-lg text-pretty text-sm leading-relaxed text-canvas/60 sm:text-base">
               Negotiation, leadership, crisis and alliances — answered with the full weight of the
               Arthashastra.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/chat"
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-ink transition-all duration-300 hover:shadow-glow"
+                className="group inline-flex items-center gap-2 rounded-full bg-canvas px-6 py-3 text-sm font-medium text-ink transition-all duration-300 hover:shadow-glow"
               >
                 <IconBolt width={16} height={16} className="text-accent" />
                 Begin your consultation
@@ -586,7 +586,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/philosophy"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white/85 transition-colors duration-300 hover:border-white/40 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-canvas/25 px-6 py-3 text-sm font-medium text-canvas/85 transition-colors duration-300 hover:border-canvas/50 hover:text-canvas"
               >
                 Read the philosophy
               </Link>

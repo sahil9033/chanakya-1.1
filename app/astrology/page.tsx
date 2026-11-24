@@ -428,7 +428,7 @@ export default function KundaliPage() {
                     </p>
 
                     {error && (
-                      <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-sm text-rose-700">
+                      <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
                         {error}
                       </p>
                     )}
@@ -437,11 +437,11 @@ export default function KundaliPage() {
                       type="button"
                       onClick={generate}
                       disabled={!canGenerate || loading}
-                      className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:shadow-lift disabled:cursor-not-allowed disabled:opacity-40"
+                      className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-canvas shadow-sm transition-all duration-300 hover:shadow-lift disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {loading ? (
                         <>
-                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-canvas/30 border-t-canvas" />
                           Calculating chart…
                         </>
                       ) : (
@@ -686,16 +686,16 @@ function Label({ children }: { children: React.ReactNode }) {
 
 function dignityClass(d: string) {
   switch (d) {
-    case 'Exalted': return 'border-emerald-200 bg-emerald-500/10 text-emerald-700'
+    case 'Exalted': return 'border-emerald-200 bg-emerald-500/10 text-emerald-700 dark:border-emerald-500/30 dark:text-emerald-300'
     case 'Own sign': return 'border-accent/20 bg-accent-tint text-accent-deep'
-    case 'Debilitated': return 'border-rose-200 bg-rose-500/10 text-rose-700'
+    case 'Debilitated': return 'border-rose-200 bg-rose-500/10 text-rose-700 dark:border-rose-500/30 dark:text-rose-300'
     default: return 'border-ink-line bg-ink/[0.04] text-ink-soft'
   }
 }
 
 function strengthClass(s: string) {
   switch (s) {
-    case 'Strong': return 'border-emerald-200 bg-emerald-500/10 text-emerald-700'
+    case 'Strong': return 'border-emerald-200 bg-emerald-500/10 text-emerald-700 dark:border-emerald-500/30 dark:text-emerald-300'
     case 'Moderate': return 'border-accent/20 bg-accent-tint text-accent-deep'
     default: return 'border-ink-line bg-ink/[0.04] text-ink-soft'
   }
