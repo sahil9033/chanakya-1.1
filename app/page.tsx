@@ -271,89 +271,83 @@ export default function HomePage() {
           <span className="mesh-layer mesh-d" />
         </div>
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-14 text-center sm:pt-20">
-          {/* Animated layered gradient emblem (Apple-style concentric pastel forms) */}
-          <Reveal className="flex justify-center">
-            <div className="relative mb-8 flex h-40 w-40 items-center justify-center sm:h-48 sm:w-48">
-              {/* Outer layered rings */}
+        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pt-24">
+          {/* Logo flower — forms behind the text */}
+          <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-10 sm:pt-16" aria-hidden="true">
+            <div className="relative flex h-72 w-72 items-center justify-center sm:h-96 sm:w-96">
+              {/* Soft bloom halo */}
               <span
-                className="absolute inset-0 rounded-full opacity-70 animate-aurora-breathe"
+                className="absolute inset-0 rounded-full opacity-60 animate-aurora-breathe"
                 style={{
                   background:
-                    'conic-gradient(from 0deg, rgba(253,186,116,0.5), rgba(251,113,133,0.45), rgba(167,139,250,0.45), rgba(94,234,212,0.45), rgba(253,186,116,0.5))',
-                  filter: 'blur(2px)',
+                    'radial-gradient(circle, rgba(167,139,250,0.28) 0%, rgba(253,186,116,0.18) 40%, rgba(94,234,212,0.12) 65%, transparent 75%)',
+                  filter: 'blur(24px)',
                 }}
-                aria-hidden="true"
               />
+              {/* The logo — scales & blooms like a flower opening */}
               <span
-                className="absolute inset-4 rounded-full opacity-80 animate-aurora-breathe-rev"
+                className="block h-full w-full animate-logo-bloom"
                 style={{
-                  background:
-                    'conic-gradient(from 120deg, rgba(129,140,248,0.5), rgba(94,234,212,0.45), rgba(253,224,71,0.45), rgba(251,113,133,0.5), rgba(129,140,248,0.5))',
-                  filter: 'blur(1.5px)',
+                  backgroundImage: 'url(/logo.svg)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  backgroundSize: 'contain',
+                  maskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
+                  WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
+                  opacity: 0.85,
                 }}
-                aria-hidden="true"
               />
-              <span
-                className="absolute inset-8 rounded-full opacity-90 animate-aurora-breathe"
-                style={{
-                  background:
-                    'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95), rgba(253,224,71,0.55) 40%, rgba(251,113,133,0.5) 70%, rgba(129,140,248,0.5) 100%)',
-                }}
-                aria-hidden="true"
-              />
-              {/* Core mark */}
-              <span className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 shadow-soft backdrop-blur-sm animate-float-slow sm:h-20 sm:w-20">
-                <span className="font-serif text-3xl font-bold text-accent-deep sm:text-4xl">चा</span>
+            </div>
+          </div>
+
+          {/* Content sits above the logo */}
+          <div className="relative z-10">
+            <Reveal className="flex justify-center" delay={60}>
+              <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                Vedhh AI · Ask Chanakya
               </span>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <Reveal className="flex justify-center" delay={60}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Vedhh AI · Ask Chanakya
-            </span>
-          </Reveal>
+            <Reveal delay={120}>
+              <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.02] tracking-tightest text-ink sm:text-6xl lg:text-7xl">
+                Strategic counsel,{' '}
+                <em className="italic text-accent-deep">grounded</em> in the Arthashastra
+              </h1>
+            </Reveal>
 
-          <Reveal delay={120}>
-            <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.02] tracking-tightest text-ink sm:text-6xl lg:text-7xl">
-              Strategic counsel,{' '}
-              <em className="italic text-accent-deep">grounded</em> in the Arthashastra
-            </h1>
-          </Reveal>
+            <Reveal delay={180}>
+              <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
+                Vedhh AI answers your hardest calls — negotiation, leadership, crisis and alliances —
+                from Kautilya&apos;s Arthashastra and Chāṇakya Nīti. It also computes your precise
+                sidereal Kundali, Lagna to Vimshottari dasha, and interprets only the calculated chart.
+              </p>
+            </Reveal>
 
-          <Reveal delay={180}>
-            <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
-              Vedhh AI answers your hardest calls — negotiation, leadership, crisis and alliances —
-              from Kautilya&apos;s Arthashastra and Chāṇakya Nīti. It also computes your precise
-              sidereal Kundali, Lagna to Vimshottari dasha, and interprets only the calculated chart.
-            </p>
-          </Reveal>
-
-          <Reveal delay={240}>
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/chat"
-                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-canvas shadow-sm transition-all duration-300 hover:shadow-lift"
-              >
-                <IconBolt width={16} height={16} className="text-accent" />
-                Ask Chanakya
-                <IconArrowRight
-                  width={16}
-                  height={16}
-                  className="transition-transform duration-300 ease-expo group-hover:translate-x-1"
-                />
-              </Link>
-              <Link
-                href="/astrology"
-                className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/60 px-6 py-3 text-sm font-medium text-ink backdrop-blur transition-all duration-300 hover:bg-cream hover:shadow-soft"
-              >
-                <IconCompass width={16} height={16} className="text-accent" />
-                Generate your Kundali
-              </Link>
-            </div>
-          </Reveal>
+            <Reveal delay={240}>
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/chat"
+                  className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-canvas shadow-sm transition-all duration-300 hover:shadow-lift"
+                >
+                  <IconBolt width={16} height={16} className="text-accent" />
+                  Ask Chanakya
+                  <IconArrowRight
+                    width={16}
+                    height={16}
+                    className="transition-transform duration-300 ease-expo group-hover:translate-x-1"
+                  />
+                </Link>
+                <Link
+                  href="/astrology"
+                  className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/60 px-6 py-3 text-sm font-medium text-ink backdrop-blur transition-all duration-300 hover:bg-cream hover:shadow-soft"
+                >
+                  <IconCompass width={16} height={16} className="text-accent" />
+                  Generate your Kundali
+                </Link>
+              </div>
+            </Reveal>
+          </div>
 
           {/* Ask bar */}
           <Reveal delay={300}>
