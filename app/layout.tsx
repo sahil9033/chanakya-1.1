@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
 import { AuthProvider } from '../lib/AuthContext'
+import Navbar from './components/Navbar'
 import MusicPlayer from './components/MusicPlayer'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.app'
@@ -8,11 +9,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.ap
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Vedhh AI — Vedic Astrology & Kundali AI',
+    default: 'Vedhh AI — Strategic Counsel & Vedic Astrology',
     template: '%s · Vedhh AI',
   },
   description:
-    'Vedhh AI is a Vedic astrology and Kundali AI. It calculates a precise sidereal (Lahiri) birth chart — Lagna, planets, nakshatra, Vimshottari dasha and transits — then interprets it with grounded, technique-referenced AI. Ask Chanakya for Arthashastra-grounded strategic counsel too.',
+    'Vedhh AI is a strategic-intelligence engine — ask Chanakya for Arthashastra-grounded counsel on negotiation, leadership, crisis and alliances. It also computes a precise sidereal (Lahiri) Kundali — Lagna, planets, nakshatra, Vimshottari dasha and transits — then interprets only the calculated chart.',
   applicationName: 'Vedhh AI',
   keywords: [
     'Vedhh AI',
@@ -50,15 +51,15 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Vedhh AI',
     url: SITE_URL,
-    title: 'Vedhh AI — Vedic Astrology & Kundali AI',
+    title: 'Vedhh AI — Strategic Counsel & Vedic Astrology',
     description:
-      'Calculate a precise sidereal Vedic Kundali and receive grounded AI interpretation. Deterministic astronomy first, interpretation second.',
+      'Ask Chanakya for Arthashastra-grounded strategic counsel, and calculate a precise sidereal Vedic Kundali. Strategy first, deterministic astronomy, grounded interpretation.',
   },
   twitter: {
     card: 'summary',
-    title: 'Vedhh AI — Vedic Astrology & Kundali AI',
+    title: 'Vedhh AI — Strategic Counsel & Vedic Astrology',
     description:
-      'Calculate a precise sidereal Vedic Kundali and receive grounded AI interpretation.',
+      'Ask Chanakya for strategic counsel, and calculate a precise sidereal Vedic Kundali.',
   },
   robots: {
     index: true,
@@ -134,13 +135,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
       />
-      <body className="bg-canvas text-ink antialiased">
+      <body className="flex min-h-dvh flex-col bg-canvas text-ink antialiased">
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
-        <AuthProvider>{children}</AuthProvider>
+        {/* Navbar lives in the layout so it persists across route changes and
+            never re-mounts (no blink) — only the page content swaps below. */}
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
         <MusicPlayer />
       </body>
     </html>

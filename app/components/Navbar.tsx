@@ -19,7 +19,7 @@ const NAV_LINKS = [
   { name: 'Overview', href: '/' },
   { name: 'Ask Chanakya', href: '/chat' },
   { name: 'Nadi Astrology', href: '/astrology' },
-  { name: 'Philosophy', href: '/philosophy' },
+  { name: 'About', href: '/about' },
 ]
 
 export default function Navbar() {

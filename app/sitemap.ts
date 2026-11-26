@@ -17,22 +17,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/astrology`,
+      url: `${SITE_URL}/chat`,
       lastModified: LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/chat`,
+      url: `${SITE_URL}/astrology`,
       lastModified: LAST_MODIFIED,
       changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/philosophy`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.85,
     },
     {
       url: `${SITE_URL}/about`,

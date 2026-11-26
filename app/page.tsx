@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Reveal from './components/Reveal'
 import {
@@ -81,17 +80,17 @@ const PROTOCOL = [
 ]
 
 const DOCTRINE = [
+  'Arthashastra',
+  'Chāṇakya Nīti',
+  'The 4 Upāyas',
+  'Saptāṅga',
+  'Ṣāḍguṇya',
+  'Maṇḍala Theory',
+  'Upaniṣadic Viveka',
   'Vedic Astrology',
   'Sidereal Kundali',
   'Nakshatra & Pada',
   'Vimshottari Dasha',
-  'Arthashastra',
-  'Chāṇakya Nīti',
-  'Saptāṅga',
-  'The 4 Upāyas',
-  'Ṣāḍguṇya',
-  'Maṇḍala Theory',
-  'Upaniṣadic Viveka',
   'NVIDIA NIM',
 ]
 
@@ -262,9 +261,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-canvas text-ink">
-      <Navbar />
-
+    <div className="relative flex flex-1 flex-col bg-canvas text-ink">
       {/* ---------------- HERO ---------------- */}
       <section className="relative isolate overflow-hidden">
         <div className="mesh" aria-hidden="true">
@@ -277,33 +274,33 @@ export default function HomePage() {
           <Reveal className="flex justify-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Vedic astrology · Kundali AI
+              Vedhh AI · Ask Chanakya
             </span>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.02] tracking-tightest text-ink sm:text-6xl lg:text-7xl">
-              Your Vedic chart,{' '}
-              <em className="italic text-accent-deep">calculated</em> with precision
+              Strategic counsel,{' '}
+              <em className="italic text-accent-deep">grounded</em> in the Arthashastra
             </h1>
           </Reveal>
 
           <Reveal delay={150}>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
-              Vedhh AI computes a precise sidereal (Lahiri) Kundali from your exact birth time and
-              place — Lagna, grahas, nakshatra, Vimshottari dasha and transits — then interprets only
-              the calculated chart. Counsel from the Arthashastra is built in.
+              Vedhh AI answers your hardest calls — negotiation, leadership, crisis and alliances —
+              from Kautilya&apos;s Arthashastra and Chāṇakya Nīti. It also computes your precise
+              sidereal Kundali, Lagna to Vimshottari dasha, and interprets only the calculated chart.
             </p>
           </Reveal>
 
           <Reveal delay={220}>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
-                href="/astrology"
+                href="/chat"
                 className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-canvas shadow-sm transition-all duration-300 hover:shadow-lift"
               >
-                <IconCompass width={16} height={16} className="text-accent" />
-                Generate your Kundali
+                <IconBolt width={16} height={16} className="text-accent" />
+                Ask Chanakya
                 <IconArrowRight
                   width={16}
                   height={16}
@@ -311,11 +308,11 @@ export default function HomePage() {
                 />
               </Link>
               <Link
-                href="/chat"
+                href="/astrology"
                 className="inline-flex items-center gap-2 rounded-full border border-ink-line px-6 py-3 text-sm font-medium text-ink transition-colors duration-300 hover:bg-cream"
               >
-                <IconBolt width={16} height={16} className="text-accent" />
-                Ask Chanakya
+                <IconCompass width={16} height={16} className="text-accent" />
+                Generate your Kundali
               </Link>
             </div>
           </Reveal>
@@ -585,10 +582,10 @@ export default function HomePage() {
                 />
               </Link>
               <Link
-                href="/philosophy"
+                href="/about"
                 className="inline-flex items-center gap-2 rounded-full border border-canvas/25 px-6 py-3 text-sm font-medium text-canvas/85 transition-colors duration-300 hover:border-canvas/50 hover:text-canvas"
               >
-                Read the philosophy
+                About us
               </Link>
             </div>
           </div>

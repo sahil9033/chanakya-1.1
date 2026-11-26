@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Navbar from '../components/Navbar'
 import SignInGate from '../components/SignInGate'
 import { useAuth } from '../../lib/AuthContext'
 import {
@@ -102,14 +101,20 @@ const AI_MODELS = [
   {
     id: 'bolt',
     name: 'Chanakya Flash',
-    tag: '⚡ Flash Bolt',
-    desc: 'Sub-second real-time streaming · Fast as lightning',
+    short: 'Flash',
+    desc: 'Sub-second real-time streaming · fast as lightning',
+  },
+  {
+    id: 'lightning',
+    name: 'Chanakya Swift',
+    short: 'Swift',
+    desc: 'Balanced depth and speed for everyday strategy',
   },
   {
     id: 'super',
     name: 'Chanakya Deep',
-    tag: '🧠 Deep Sovereign',
-    desc: 'Maximum depth & comprehensive strategic reasoning',
+    short: 'Deep',
+    desc: 'Maximum depth and comprehensive strategic reasoning',
   },
 ]
 
@@ -528,7 +533,7 @@ function ChatContent() {
             <div className="px-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
               Engine Model
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-1 rounded-xl bg-cream/80 p-1 border border-ink-line/60">
+            <div className="mt-2 space-y-1">
               {AI_MODELS.map((m) => {
                 const active = selectedModel === m.id
                 return (
@@ -541,13 +546,17 @@ function ChatContent() {
                         setSidebarOpen(false)
                       }
                     }}
-                    className={`rounded-lg px-2 py-1.5 text-[11px] font-medium transition-all ${
+                    className={`flex w-full items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-left transition-colors ${
                       active
-                        ? 'bg-canvas text-ink shadow-xs border border-ink-line'
-                        : 'text-ink-soft hover:text-ink'
+                        ? 'bg-cream text-ink border border-ink-line/70'
+                        : 'text-ink-soft hover:bg-cream/70 hover:text-ink'
                     }`}
                   >
-                    {m.name}
+                    <span className="min-w-0">
+                      <span className="block text-xs font-medium">{m.name}</span>
+                      <span className="block truncate text-[10px] text-ink-faint">{m.desc}</span>
+                    </span>
+                    {active && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />}
                   </button>
                 )
               })}
@@ -635,8 +644,9 @@ function ChatContent() {
                 <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
                 <span className="truncate">{activeLensObj.label}</span>
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-ink-line/70 bg-canvas px-2.5 py-1 text-[11px] text-ink-soft">
-                {activeModelObj.tag}
+              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-ink-line/70 bg-canvas px-2.5 py-1 text-[11px] text-ink-soft">
+                <IconBolt width={11} height={11} className="text-accent" />
+                {activeModelObj.name}
               </span>
             </div>
           </div>
@@ -661,13 +671,52 @@ function ChatContent() {
         <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 pb-36 sm:pb-48">
           <div className="mx-auto w-full max-w-3xl">
             {!hasMessages ? (
-              /* Empty State (Claude style with Chanakya sovereign branding) */
-              <div className="py-8 sm:py-20 text-center animate-fade-in">
-                <div className="inline-flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-cream border border-ink-line shadow-xs mb-4 sm:mb-5">
-                  <span className="font-serif text-2xl sm:text-3xl font-bold text-accent-deep">चा</span>
+              /* Empty State — Chanakya 1.1 boot animation */
+              <div className="py-8 sm:py-20 text-center">
+                {/* Animated model emblem */}
+                <div className="relative mx-auto mb-5 flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28">
+                  {/* Pulsing halos */}
+                  <span
+                    className="absolute inset-0 rounded-full border border-accent/40 animate-ring-pulse"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="absolute inset-0 rounded-full border border-accent/30 animate-ring-pulse"
+                    style={{ animationDelay: '1.3s' }}
+                    aria-hidden="true"
+                  />
+                  {/* Rotating orbit with a travelling node */}
+                  <span
+                    className="absolute inset-0 rounded-full border border-dashed border-ink-line animate-spin-slow"
+                    aria-hidden="true"
+                  >
+                    <span className="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent" />
+                  </span>
+                  {/* Core mark */}
+                  <span className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-cream border border-ink-line shadow-xs animate-float-slow sm:h-16 sm:w-16">
+                    <span className="font-serif text-2xl sm:text-3xl font-bold text-accent-deep">चा</span>
+                  </span>
                 </div>
 
-                <h1 className="font-serif text-2xl sm:text-4xl text-ink font-normal tracking-tight">
+                {/* Model identity + boot status */}
+                <div className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.16em] text-ink-soft animate-fade-up">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-75 animate-ping" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+                  </span>
+                  Chanakya 1.1
+                  <span className="text-ink-faint" aria-hidden="true">·</span>
+                  <span className="inline-flex items-center gap-1" aria-hidden="true">
+                    <span className="h-1 w-1 rounded-full bg-current animate-dot-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="h-1 w-1 rounded-full bg-current animate-dot-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="h-1 w-1 rounded-full bg-current animate-dot-bounce" style={{ animationDelay: '300ms' }} />
+                  </span>
+                </div>
+
+                <h1
+                  className="mt-4 font-serif text-2xl sm:text-4xl text-ink font-normal tracking-tight animate-fade-up"
+                  style={{ animationDelay: '80ms' }}
+                >
                   Consult Acharya Chanakya
                 </h1>
                 <p className="mt-2.5 sm:mt-3 max-w-md mx-auto text-xs sm:text-sm text-ink-soft leading-relaxed px-2">
@@ -827,9 +876,9 @@ function ChatContent() {
                 </button>
               </div>
 
-              {/* Bottom bar inside composer (Treatise + Model selector pills Claude-style) */}
-              <div className="flex items-center justify-between gap-1.5 px-1 sm:px-2 pb-0.5 pt-1.5 sm:pt-2 border-t border-ink-line/50">
-                <div className="flex items-center gap-1.5 max-w-full overflow-x-auto no-scrollbar py-0.5">
+              {/* Bottom bar inside composer: Treatise lens + three-model switcher */}
+              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-1 sm:px-2 pb-0.5 pt-1.5 sm:pt-2 border-t border-ink-line/50">
+                <div className="flex min-w-0 items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                   {/* Treatise Lens Pill Dropdown */}
                   <div className="relative group shrink-0">
                     <select
@@ -851,29 +900,35 @@ function ChatContent() {
                     />
                   </div>
 
-                  {/* Model Selector Pill Dropdown */}
-                  <div className="relative group shrink-0">
-                    <select
-                      value={selectedModel}
-                      onChange={(e) => setSelectedModel(e.target.value)}
-                      aria-label="Engine model"
-                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[110px] sm:max-w-none truncate"
-                    >
-                      {AI_MODELS.map((m) => (
-                        <option key={m.id} value={m.id}>
-                          {m.tag}
-                        </option>
-                      ))}
-                    </select>
-                    <IconChevronRight
-                      width={11}
-                      height={11}
-                      className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-ink-faint"
-                    />
+                  {/* Three-model segmented switcher */}
+                  <div
+                    role="group"
+                    aria-label="Engine model"
+                    className="flex shrink-0 items-center gap-0.5 rounded-full border border-ink-line bg-cream/80 p-0.5"
+                  >
+                    {AI_MODELS.map((m) => {
+                      const active = selectedModel === m.id
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => setSelectedModel(m.id)}
+                          aria-pressed={active}
+                          title={m.desc}
+                          className={`rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium transition-all duration-200 ${
+                            active
+                              ? 'bg-canvas text-ink shadow-xs'
+                              : 'text-ink-soft hover:text-ink'
+                          }`}
+                        >
+                          {m.short}
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
 
-                <span className="hidden items-center gap-1.5 text-[11px] text-ink-faint md:flex shrink-0">
+                <span className="hidden items-center gap-1.5 text-[11px] text-ink-faint lg:flex shrink-0">
                   <span className="h-1 w-1 rounded-full bg-accent" />
                   Enter ↵ to send · sub-second streaming
                 </span>
@@ -888,8 +943,7 @@ function ChatContent() {
 
 export default function ChatPage() {
   return (
-    <div className="relative flex min-h-screen flex-col bg-canvas text-ink">
-      <Navbar />
+    <div className="relative flex flex-1 flex-col bg-canvas text-ink">
       <SignInGate>
         <Suspense
           fallback={

@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SignInGate from '../components/SignInGate'
 import { useAuth } from '../../lib/AuthContext'
@@ -214,8 +213,7 @@ function AccountContent() {
 
 export default function AccountPage() {
   return (
-    <div className="relative flex min-h-screen flex-col bg-canvas text-ink">
-      <Navbar />
+    <div className="relative flex flex-1 flex-col bg-canvas text-ink">
       <SignInGate>
         <AccountContent />
       </SignInGate>

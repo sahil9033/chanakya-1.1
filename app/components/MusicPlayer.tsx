@@ -1,21 +1,29 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { IconClose, IconMusic, IconPause, IconPlay } from './Icons'
 
 const STORAGE_KEY = 'vedhh-music-dismissed'
 
 /**
- * Floating ambient music player.
+ * Floating ambient music player, pinned to the bottom-right so it never covers
+ * the chat composer.
  * - Auto-plays the "vedhh" track on first user interaction (browsers block
  *   untriggered audio autoplay, so we start on the first pointer/key event).
  * - Loops indefinitely.
- * - User can play/pause or dismiss the player (dismissal is remembered).
+ * - The audio element only exists while the player UI is rendered, so music can
+ *   never keep playing once the box is dismissed.
+ * - Dismissal is remembered.
  */
 export default function MusicPlayer() {
+  const pathname = usePathname()
   const audioRef = useRef<HTMLAudioElement>(null)
   const [playing, setPlaying] = useState(false)
   const [visible, setVisible] = useState(true)
+
+  // The chat composer owns the bottom of the screen, so lift the player above it.
+  const onChat = pathname?.startsWith('/chat') ?? false
 
   // Respect a previous dismissal.
   useEffect(() => {
@@ -31,6 +39,11 @@ export default function MusicPlayer() {
     if (!audio) return
 
     let started = false
+    const cleanup = () => {
+      window.removeEventListener('pointerdown', onInteract)
+      window.removeEventListener('keydown', onInteract)
+      window.removeEventListener('touchstart', onInteract)
+    }
     const tryPlay = async () => {
       if (started) return
       started = true
@@ -43,32 +56,20 @@ export default function MusicPlayer() {
         started = false
       }
     }
-
-    const onInteract = () => {
+    function onInteract() {
+      cleanup()
       tryPlay()
-      window.removeEventListener('pointerdown', onInteract)
-      window.removeEventListener('keydown', onInteract)
-      window.removeEventListener('touchstart', onInteract)
     }
 
-    // Attempt immediately; if blocked, wait for first interaction.
     tryPlay().then(() => {
-      if (!audio.paused) {
-        window.removeEventListener('pointerdown', onInteract)
-        window.removeEventListener('keydown', onInteract)
-        window.removeEventListener('touchstart', onInteract)
-      } else {
+      if (audio.paused) {
         window.addEventListener('pointerdown', onInteract, { once: true })
         window.addEventListener('keydown', onInteract, { once: true })
         window.addEventListener('touchstart', onInteract, { once: true })
       }
     })
 
-    return () => {
-      window.removeEventListener('pointerdown', onInteract)
-      window.removeEventListener('keydown', onInteract)
-      window.removeEventListener('touchstart', onInteract)
-    }
+    return cleanup
   }, [visible])
 
   // Sync state when audio naturally pauses/ends (shouldn't with loop, but safe).
@@ -83,7 +84,7 @@ export default function MusicPlayer() {
       audio.removeEventListener('play', onPlay)
       audio.removeEventListener('pause', onPause)
     }
-  }, [])
+  }, [visible])
 
   const toggle = () => {
     const audio = audioRef.current
@@ -106,14 +107,15 @@ export default function MusicPlayer() {
     } catch {}
   }
 
-  if (!visible) {
-    // Keep the audio element mounted (hidden) so state persists across
-    // route changes, but don't render the UI.
-    return <audio ref={audioRef} src="/vedhh.wav" loop preload="auto" />
-  }
+  // No player UI → no audio element. Music can never play with no way to stop it.
+  if (!visible) return null
 
   return (
-    <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 animate-fade-in sm:bottom-6">
+    <div
+      className={`fixed right-4 z-40 sm:right-6 ${
+        onChat ? 'bottom-28 sm:bottom-36' : 'bottom-4 sm:bottom-6'
+      }`}
+    >
       <div className="spot pointer-events-auto flex items-center gap-2.5 rounded-full border border-ink-line bg-canvas/90 px-2 py-2 pr-3.5 shadow-soft backdrop-blur-xl">
         {/* Play / Pause */}
         <button

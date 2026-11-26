@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SignInGate from '../components/SignInGate'
 import Reveal from '../components/Reveal'
@@ -386,9 +385,7 @@ export default function KundaliPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-canvas text-ink">
-      <Navbar />
-
+    <div className="relative flex flex-1 flex-col bg-canvas text-ink">
       <SignInGate>
         <main className="flex-1">
           {/* Header */}

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Reveal from '../components/Reveal'
 import {
@@ -17,13 +16,13 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.ap
 export const metadata: Metadata = {
   title: 'About — Sahil Dadaso Patil & Vedhh AI',
   description:
-    'Vedhh AI is a Vedic astrology and Kundali AI founded by Sahil Dadaso Patil. Learn how Vedhh AI calculates precise sidereal charts and interprets them with grounded AI.',
+    'Vedhh AI is a strategic-intelligence engine grounded in the Arthashastra and a Vedic astrology (Kundali) AI, founded by Sahil Dadaso Patil. Learn how it calculates precise sidereal charts and interprets them with grounded AI.',
   alternates: { canonical: '/about' },
   openGraph: {
     type: 'profile',
     title: 'About — Sahil Dadaso Patil & Vedhh AI',
     description:
-      'Vedhh AI is a Vedic astrology and Kundali AI founded by Sahil Dadaso Patil.',
+      'Vedhh AI is a strategic-intelligence engine and a Vedic astrology (Kundali) AI founded by Sahil Dadaso Patil.',
   },
 }
 
@@ -39,6 +38,12 @@ const PERSON_JSON_LD = {
 
 const BUILDS = [
   {
+    Icon: IconBolt,
+    title: 'Ask Chanakya',
+    desc: 'Vedhh AI\u2019s flagship: strategic counsel grounded in Kautilya\u2019s Arthashastra, Chanakya Niti and the Upaniṣadic discipline of discernment.',
+    href: '/chat',
+  },
+  {
     Icon: IconCompass,
     title: 'Kundali AI',
     desc: 'A precise sidereal Vedic birth chart — Lagna, grahas, nakshatra and pada, houses, dignity, Vimshottari dasha and transits — calculated deterministically, then interpreted.',
@@ -50,22 +55,15 @@ const BUILDS = [
     desc: 'Traditional Vedic techniques applied to your exact chart: drishti, house lordship, yogas and dasha timing — never generic horoscope text.',
     href: '/astrology',
   },
-  {
-    Icon: IconBolt,
-    title: 'Ask Chanakya',
-    desc: 'Strategic counsel grounded in Kautilya’s Arthashastra, Chanakya Niti and the Upaniṣadic discipline of discernment.',
-    href: '/chat',
-  },
 ]
 
 export default function AboutPage() {
   return (
-    <div className="relative flex min-h-screen flex-col bg-canvas text-ink">
+    <div className="relative flex flex-1 flex-col bg-canvas text-ink">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
       />
-      <Navbar />
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden border-b border-ink-line">
@@ -82,14 +80,15 @@ export default function AboutPage() {
           </Reveal>
           <Reveal delay={80}>
             <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.04] tracking-tightest text-ink sm:text-6xl">
-              Vedhh AI — Vedic astrology, calculated honestly
+              Vedhh AI — strategic counsel, honest astrology
             </h1>
           </Reveal>
           <Reveal delay={140}>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
-              Vedhh AI is a Vedic astrology and Kundali AI. It never guesses planetary positions — it
-              computes a precise sidereal chart from your exact birth time and place, then interprets
-              only what the chart actually contains.
+              Vedhh AI is a strategic-intelligence engine first — counsel grounded in the
+              Arthashastra, Chāṇakya Nīti and the Upaniṣads — and a Vedic astrology (Kundali) engine
+              second. It never guesses planetary positions: it computes a precise sidereal chart from
+              your exact birth time and place, then interprets only what the chart actually contains.
             </p>
           </Reveal>
         </div>

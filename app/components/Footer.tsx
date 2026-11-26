@@ -6,9 +6,9 @@ const COLUMNS = [
     heading: 'Knowledge',
     links: [
       { label: 'The 4 Upāyas', href: '/chat?filter=arthashastra' },
-      { label: 'Saptāṅga Pillars', href: '/philosophy' },
+      { label: 'Saptāṅga Pillars', href: '/about' },
       { label: 'Mandala Geopolitics', href: '/chat?filter=arthashastra' },
-      { label: 'Upanishadic Viveka', href: '/philosophy' },
+      { label: 'Upanishadic Viveka', href: '/about' },
     ],
   },
   {
@@ -26,7 +26,6 @@ const COLUMNS = [
     links: [
       { label: 'About us', href: '/about' },
       { label: 'Kundali AI', href: '/astrology' },
-      { label: 'Philosophy', href: '/philosophy' },
       {
         label: 'LinkedIn',
         href: 'https://www.linkedin.com/in/sahil-dadaso-patil/',
@@ -59,9 +58,9 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-pretty text-sm leading-relaxed text-ink-soft">
-              Vedhh AI builds Vedic astrology (Kundali) intelligence — deterministic sidereal
-              calculation first, grounded AI interpretation second — alongside strategic counsel from
-              the Arthashastra and Upaniṣads.
+              Vedhh AI is a strategic-intelligence engine first — counsel from the Arthashastra,
+              Chāṇakya Nīti and the Upaniṣads — and a Vedic astrology (Kundali) engine second:
+              deterministic sidereal calculation, then grounded interpretation.
             </p>
             <div className="mt-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-faint">
               <span className="h-1 w-1 rounded-full bg-accent" />

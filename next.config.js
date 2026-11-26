@@ -2,6 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // The Philosophy page has been replaced by the About page.
+  async redirects() {
+    return [{ source: '/philosophy', destination: '/about', permanent: true }]
+  },
+
   async headers() {
     return [
       {
