@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.app'
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.app'
+).replace(/\/$/, '')
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,7 +10,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/'],
+        // Keep crawlers out of auth-gated API routes and internal codex.
+        disallow: ['/api/', '/codex/'],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
