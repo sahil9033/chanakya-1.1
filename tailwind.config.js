@@ -92,10 +92,9 @@ module.exports = {
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
         },
-        'logo-bloom': {
-          '0%': { transform: 'scale(0.15) rotate(-25deg)', opacity: '0' },
-          '55%': { opacity: '0.9' },
-          '100%': { transform: 'scale(1) rotate(0deg)', opacity: '0.85' },
+        'logo-grow': {
+          '0%,100%': { transform: 'scale(0.92)' },
+          '50%': { transform: 'scale(1.08)' },
         },
         'slide-up': {
           '0%': { opacity: '0', transform: 'translate3d(0,12px,0)' },
@@ -118,7 +117,7 @@ module.exports = {
         'aurora-breathe-rev': 'aurora-breathe-rev 18s ease-in-out infinite',
         'gradient-pan': 'gradient-pan 16s ease infinite',
         'slide-up': 'slide-up 0.5s cubic-bezier(0.16,1,0.3,1) both',
-        'logo-bloom': 'logo-bloom 1.4s cubic-bezier(0.16,1,0.3,1) both',
+        'logo-grow': 'logo-grow 10s ease-in-out infinite',
       },
     },
   },

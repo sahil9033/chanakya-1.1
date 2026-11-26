@@ -277,24 +277,24 @@ export default function HomePage() {
             <div className="relative flex h-80 w-80 items-center justify-center sm:h-[28rem] sm:w-[28rem]">
               {/* Soft bloom halo */}
               <span
-                className="absolute inset-0 rounded-full opacity-70 animate-aurora-breathe"
+                className="absolute inset-0 rounded-full opacity-80 animate-aurora-breathe"
                 style={{
                   background:
-                    'radial-gradient(circle, rgba(252,130,17,0.22) 0%, rgba(167,139,250,0.18) 45%, rgba(94,234,212,0.10) 70%, transparent 80%)',
+                    'radial-gradient(circle, rgba(252,130,17,0.26) 0%, rgba(167,139,250,0.20) 45%, rgba(94,234,212,0.12) 70%, transparent 80%)',
                   filter: 'blur(32px)',
                 }}
               />
-              {/* The flower logo — slowly rotating, heavily blurred & low opacity so text stays readable */}
+              {/* The flower logo — slowly rotating & breathing, blurred so text stays readable */}
               <span className="block h-full w-full animate-logo-spin">
                 <span
-                  className="block h-full w-full animate-logo-bloom"
+                  className="block h-full w-full animate-logo-grow"
                   style={{
                     backgroundImage: 'url(/logo-flower.svg)',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     backgroundSize: 'contain',
                     filter: 'blur(14px)',
-                    opacity: 0.32,
+                    opacity: 0.45,
                   }}
                 />
               </span>
