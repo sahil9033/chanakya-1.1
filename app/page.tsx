@@ -272,35 +272,34 @@ export default function HomePage() {
         </div>
 
         <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pt-24">
-          {/* Logo flower — forms behind the text */}
-          <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-10 sm:pt-16" aria-hidden="true">
-            <div className="relative flex h-72 w-72 items-center justify-center sm:h-96 sm:w-96">
+          {/* Logo flower — blurred, glassmorphic, forms behind the text */}
+          <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-6 sm:pt-10" aria-hidden="true">
+            <div className="relative flex h-80 w-80 items-center justify-center sm:h-[28rem] sm:w-[28rem]">
               {/* Soft bloom halo */}
               <span
-                className="absolute inset-0 rounded-full opacity-60 animate-aurora-breathe"
+                className="absolute inset-0 rounded-full opacity-70 animate-aurora-breathe"
                 style={{
                   background:
-                    'radial-gradient(circle, rgba(167,139,250,0.28) 0%, rgba(253,186,116,0.18) 40%, rgba(94,234,212,0.12) 65%, transparent 75%)',
-                  filter: 'blur(24px)',
+                    'radial-gradient(circle, rgba(252,130,17,0.22) 0%, rgba(167,139,250,0.18) 45%, rgba(94,234,212,0.10) 70%, transparent 80%)',
+                  filter: 'blur(32px)',
                 }}
               />
-              {/* The logo — scales & blooms like a flower opening */}
+              {/* The flower logo — heavily blurred & low opacity so text stays readable */}
               <span
                 className="block h-full w-full animate-logo-bloom"
                 style={{
-                  backgroundImage: 'url(/logo.svg)',
+                  backgroundImage: 'url(/logo-flower.svg)',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
                   backgroundSize: 'contain',
-                  maskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
-                  WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 72%)',
-                  opacity: 0.85,
+                  filter: 'blur(14px)',
+                  opacity: 0.32,
                 }}
               />
             </div>
           </div>
 
-          {/* Content sits above the logo */}
+          {/* Content sits above the blurred logo */}
           <div className="relative z-10">
             <Reveal className="flex justify-center" delay={60}>
               <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">

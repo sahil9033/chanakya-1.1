@@ -11,9 +11,14 @@ import {
 } from 'react'
 import {
   GoogleAuthProvider,
+  PhoneAuthProvider,
+  RecaptchaVerifier,
   onAuthStateChanged,
+  signInWithPhoneNumber,
   signInWithPopup,
   signOut as firebaseSignOut,
+  type ApplicationVerifier,
+  type ConfirmationResult,
   type User,
 } from 'firebase/auth'
 import { auth } from './firebase'
@@ -24,6 +29,10 @@ interface AuthContextValue {
   loading: boolean
   error: string | null
   signInWithGoogle: () => Promise<void>
+  sendPhoneOtp: (phoneNumber: string, appVerifier: ApplicationVerifier) => Promise<ConfirmationResult | null>
+  confirmPhoneOtp: (confirmationResult: ConfirmationResult, code: string) => Promise<boolean>
+  createRecaptcha: (containerId: string) => ApplicationVerifier
+  clearRecaptcha: (containerId: string) => void
   signOut: () => Promise<void>
 }
 
@@ -42,6 +51,20 @@ function toMessage(err: unknown): string {
       return 'Network unreachable. Check your connection and try again.'
     case 'auth/unauthorized-domain':
       return 'This domain is not authorised in Firebase Authentication settings.'
+    case 'auth/invalid-phone-number':
+      return 'That phone number looks invalid. Please check it and try again.'
+    case 'auth/missing-phone-number':
+      return 'Please enter your phone number.'
+    case 'auth/code-expired':
+      return 'The code has expired. Please request a new one.'
+    case 'auth/invalid-verification-code':
+      return 'That code is incorrect. Please try again.'
+    case 'auth/invalid-verification-id':
+      return 'Something went wrong. Please request a new code.'
+    case 'auth/too-many-requests':
+      return 'Too many attempts. Please wait a moment and try again.'
+    case 'auth/operation-not-allowed':
+      return 'Phone sign-in is not enabled. Please contact support.'
     default:
       return err instanceof Error ? err.message : 'Sign-in failed. Please try again.'
   }
@@ -80,6 +103,75 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  // ---- Phone (OTP) authentication ----
+
+  // Create an invisible reCAPTCHA verifier bound to a container element.
+  const createRecaptcha = useCallback((containerId: string): ApplicationVerifier => {
+    // Clear any previous verifier for the same container first.
+    // @ts-expect-error firebase attaches the verifier instance to the window
+    if (window.recaptchaVerifier) {
+      try {
+        // @ts-expect-error dynamic
+        window.recaptchaVerifier.clear()
+      } catch {
+        /* ignore */
+      }
+    }
+    const verifier = new RecaptchaVerifier(auth, containerId, {
+      size: 'invisible',
+      callback: () => {
+        /* reCAPTCHA solved — sign-in continues automatically */
+      },
+    })
+    // @ts-expect-error store on window for cleanup
+    window.recaptchaVerifier = verifier
+    return verifier
+  }, [])
+
+  const clearRecaptcha = useCallback((_containerId: string) => {
+    // @ts-expect-error firebase attaches the verifier instance to the window
+    if (window.recaptchaVerifier) {
+      try {
+        // @ts-expect-error dynamic
+        window.recaptchaVerifier.clear()
+      } catch {
+        /* ignore */
+      }
+      // @ts-expect-error dynamic
+      window.recaptchaVerifier = null
+    }
+  }, [])
+
+  const sendPhoneOtp = useCallback(
+    async (
+      phoneNumber: string,
+      appVerifier: ApplicationVerifier
+    ): Promise<ConfirmationResult | null> => {
+      setError(null)
+      try {
+        return await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      } catch (err) {
+        setError(toMessage(err))
+        return null
+      }
+    },
+    []
+  )
+
+  const confirmPhoneOtp = useCallback(
+    async (confirmationResult: ConfirmationResult, code: string): Promise<boolean> => {
+      setError(null)
+      try {
+        await confirmationResult.confirm(code)
+        return true
+      } catch (err) {
+        setError(toMessage(err))
+        return false
+      }
+    },
+    []
+  )
+
   const signOut = useCallback(async () => {
     setError(null)
     try {
@@ -90,8 +182,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, loading, error, signInWithGoogle, signOut }),
-    [user, loading, error, signInWithGoogle, signOut]
+    () => ({
+      user,
+      loading,
+      error,
+      signInWithGoogle,
+      sendPhoneOtp,
+      confirmPhoneOtp,
+      createRecaptcha,
+      clearRecaptcha,
+      signOut,
+    }),
+    [
+      user,
+      loading,
+      error,
+      signInWithGoogle,
+      sendPhoneOtp,
+      confirmPhoneOtp,
+      createRecaptcha,
+      clearRecaptcha,
+      signOut,
+    ]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -201,6 +201,13 @@ export const IconLock = (p: IconProps) => (
   </Base>
 )
 
+export const IconPhone = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="6" y="2.5" width="12" height="19" rx="2.5" />
+    <path d="M10.5 18.5h3" />
+  </Base>
+)
+
 export const IconSun = (p: IconProps) => (
   <Base {...p}>
     <circle cx="12" cy="12" r="4" />
