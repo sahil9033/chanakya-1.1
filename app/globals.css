@@ -46,6 +46,7 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -68,7 +69,6 @@
   :focus-visible {
     outline: 2px solid rgb(var(--accent) / 0.55);
     outline-offset: 2px;
-    border-radius: 8px;
   }
 
   ::-webkit-scrollbar {
@@ -232,6 +232,14 @@
   }
   .text-pretty {
     text-wrap: pretty;
+  }
+  /* Hide the scrollbar while keeping overflow scrollable (composer pill rail) */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

@@ -561,6 +561,7 @@ export default function KundaliPage() {
             {chart && (
               <div className="space-y-8">
                 <button
+                  type="button"
                   onClick={() => { setChart(null); setInterpretation('') }}
                   className="inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-ink"
                 >

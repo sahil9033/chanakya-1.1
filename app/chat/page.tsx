@@ -408,7 +408,7 @@ function ChatContent() {
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-xs md:hidden animate-fade-in"
+          className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-sm md:hidden animate-fade-in"
           aria-hidden="true"
         />
       )}
@@ -444,6 +444,7 @@ function ChatContent() {
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
+              aria-label="Close sidebar"
               className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-ink-line bg-canvas text-ink-soft hover:text-ink md:hidden transition-colors"
               title="Close sidebar"
             >
@@ -544,6 +545,7 @@ function ChatContent() {
                       <button
                         type="button"
                         onClick={(e) => deleteSession(e, s.id)}
+                        aria-label={`Delete consultation: ${s.title}`}
                         className="opacity-0 group-hover:opacity-100 hover:text-accent-deep transition-opacity p-0.5"
                         title="Delete session"
                       >
@@ -574,12 +576,14 @@ function ChatContent() {
          ========================================================================= */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-canvas w-full">
         {/* Top Header Bar inside Chat View */}
-        <div className="flex h-12 sm:h-13 shrink-0 items-center justify-between border-b border-ink-line bg-canvas/85 px-3 sm:px-4 backdrop-blur-md">
+        <div className="flex h-12 shrink-0 items-center justify-between border-b border-ink-line bg-canvas/85 px-3 sm:px-4 backdrop-blur-md">
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
             {/* Sidebar toggle button (Claude style) */}
             <button
               type="button"
               onClick={() => setSidebarOpen((v) => !v)}
+              aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+              aria-expanded={sidebarOpen}
               className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line bg-canvas text-ink-soft hover:text-ink hover:border-accent/40 transition-colors"
               title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
             >
@@ -604,10 +608,11 @@ function ChatContent() {
               <button
                 type="button"
                 onClick={startNewChat}
+                aria-label="Start a new consultation"
                 className="inline-flex items-center gap-1 rounded-full border border-ink-line bg-canvas px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs text-ink-soft hover:text-ink hover:border-accent/30 transition-colors"
               >
                 <IconPlus width={12} height={12} />
-                <span className="hidden xs:inline">New</span>
+                <span className="hidden sm:inline">New</span>
               </button>
             )}
           </div>
@@ -791,6 +796,7 @@ function ChatContent() {
                     <select
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
+                      aria-label="Treatise lens"
                       className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[130px] sm:max-w-none truncate"
                     >
                       {TREATISE_LENSES.map((t) => (
@@ -811,6 +817,7 @@ function ChatContent() {
                     <select
                       value={selectedModel}
                       onChange={(e) => setSelectedModel(e.target.value)}
+                      aria-label="Engine model"
                       className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[110px] sm:max-w-none truncate"
                     >
                       {AI_MODELS.map((m) => (
