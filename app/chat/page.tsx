@@ -4,6 +4,14 @@ import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Navbar from '../components/Navbar'
 import SignInGate from '../components/SignInGate'
+import { useAuth } from '../../lib/AuthContext'
+import {
+  subscribeSessions,
+  saveSession as saveSessionRemote,
+  deleteSession as deleteSessionRemote,
+  type ChatSession,
+  type Message,
+} from '../../lib/chatStore'
 import {
   Chakra,
   IconArrowRight,
@@ -19,20 +27,48 @@ import {
   IconTrash,
 } from '../components/Icons'
 
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-  timestamp?: string
-  latency?: string
+// Legacy key kept only to migrate any locally-saved consultations into the database.
+const LEGACY_STORAGE_KEY = 'chanakya_chat_sessions_v1'
+
+function buildSession(
+  id: string,
+  updatedMsgs: Message[],
+  activeFilter: string,
+  activeModel: string
+): ChatSession {
+  const title = updatedMsgs.find((m) => m.role === 'user')?.content.slice(0, 38) || 'Consultation'
+  return {
+    id,
+    title: title.length >= 38 ? `${title}…` : title,
+    messages: updatedMsgs,
+    filter: activeFilter,
+    model: activeModel,
+    updatedAt: Date.now(),
+  }
 }
 
-interface ChatSession {
-  id: string
-  title: string
-  messages: Message[]
-  filter: string
-  model: string
-  updatedAt: number
+// One-time migration: move any consultations saved under the old localStorage key
+// into the Realtime Database, then drop the stale local copy.
+function migrateLegacySessions(uid: string, remote: ChatSession[]) {
+  if (typeof window === 'undefined') return
+  try {
+    const raw = localStorage.getItem(LEGACY_STORAGE_KEY)
+    if (!raw) return
+    if (remote.length === 0) {
+      const local = JSON.parse(raw) as ChatSession[]
+      if (Array.isArray(local)) {
+        local
+          .filter((s) => s && s.id && Array.isArray(s.messages))
+          .slice(0, 20)
+          .forEach((s) => {
+            saveSessionRemote(uid, s).catch(() => {})
+          })
+      }
+    }
+    localStorage.removeItem(LEGACY_STORAGE_KEY)
+  } catch {
+    // ignore malformed legacy data
+  }
 }
 
 const TREATISE_LENSES = [
@@ -171,6 +207,8 @@ function renderBold(text: string) {
 
 function ChatContent() {
   const searchParams = useSearchParams()
+  const { user } = useAuth()
+  const uid = user?.uid ?? ''
   const initialFilter = searchParams.get('filter') || 'all'
   const [filter, setFilter] = useState(initialFilter)
   const [selectedModel, setSelectedModel] = useState('bolt')
@@ -185,6 +223,8 @@ function ChatContent() {
   const endRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const hasAutoFired = useRef(false)
+  const migratedRef = useRef(false)
+  const loadedFromUrlRef = useRef(false)
 
   // On desktop screens (>=768px), open sidebar by default; on mobile, keep closed
   useEffect(() => {
@@ -193,18 +233,46 @@ function ChatContent() {
     }
   }, [])
 
-  // Load chat sessions from localStorage
+  // Live-load this user's consultations from the Realtime Database.
+  // On the first snapshot, migrate any sessions kept in the old localStorage key.
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('chanakya_chat_sessions_v1')
-      if (saved) {
-        const parsed = JSON.parse(saved) as ChatSession[]
-        setSessions(parsed)
+    if (!uid) return
+    const unsubscribe = subscribeSessions(
+      uid,
+      (list) => {
+        setSessions(list)
+        if (!migratedRef.current) {
+          migratedRef.current = true
+          migrateLegacySessions(uid, list)
+        }
+      },
+      () => {
+        // Network/permission errors are non-fatal; the UI keeps working unsigned.
       }
-    } catch {
-      // ignore storage errors
+    )
+    return () => unsubscribe()
+  }, [uid])
+
+  // Deep link: /chat?session=<id> opens a saved consultation once it loads.
+  useEffect(() => {
+    const wanted = searchParams.get('session')
+    if (!wanted || loadedFromUrlRef.current) return
+    const found = sessions.find((s) => s.id === wanted)
+    if (!found) return
+    loadedFromUrlRef.current = true
+    applySession(found)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, sessions])
+
+  function applySession(s: ChatSession) {
+    setCurrentSessionId(s.id)
+    setMessages(s.messages ?? [])
+    setFilter(s.filter || 'all')
+    setSelectedModel(s.model || 'bolt')
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false)
     }
-  }, [])
+  }
 
   // Auto-scroll when messages update
   useEffect(() => {
@@ -219,43 +287,27 @@ function ChatContent() {
     }
   }, [input])
 
-  // Save session when messages change
-  const saveCurrentSession = (updatedMsgs: Message[], activeFilter = filter, activeModel = selectedModel) => {
+  // Persist the active consultation to the Realtime Database.
+  const saveCurrentSession = (
+    updatedMsgs: Message[],
+    activeFilter = filter,
+    activeModel = selectedModel
+  ) => {
     if (updatedMsgs.length === 0) return
 
-    const title =
-      updatedMsgs.find((m) => m.role === 'user')?.content.slice(0, 38) || 'Consultation'
+    const id = currentSessionId || `session_${Date.now()}`
+    if (!currentSessionId) setCurrentSessionId(id)
+
+    const session = buildSession(id, updatedMsgs, activeFilter, activeModel)
 
     setSessions((prev) => {
-      let id = currentSessionId
-      if (!id) {
-        id = `session_${Date.now()}`
-        setCurrentSessionId(id)
-      }
-
       const existingIndex = prev.findIndex((s) => s.id === id)
-      const newSession: ChatSession = {
-        id,
-        title: title.length >= 38 ? `${title}…` : title,
-        messages: updatedMsgs,
-        filter: activeFilter,
-        model: activeModel,
-        updatedAt: Date.now(),
-      }
-
-      const updated =
-        existingIndex >= 0
-          ? prev.map((s, idx) => (idx === existingIndex ? newSession : s))
-          : [newSession, ...prev]
-
-      try {
-        localStorage.setItem('chanakya_chat_sessions_v1', JSON.stringify(updated.slice(0, 20)))
-      } catch {
-        // ignore storage errors
-      }
-
-      return updated
+      return existingIndex >= 0
+        ? prev.map((s, idx) => (idx === existingIndex ? session : s))
+        : [session, ...prev]
     })
+
+    if (uid) saveSessionRemote(uid, session).catch(() => {})
   }
 
   // Auto-fire prompt from query params if present
@@ -279,26 +331,13 @@ function ChatContent() {
   }
 
   function loadSession(s: ChatSession) {
-    setCurrentSessionId(s.id)
-    setMessages(s.messages)
-    setFilter(s.filter || 'all')
-    setSelectedModel(s.model || 'bolt')
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      setSidebarOpen(false)
-    }
+    applySession(s)
   }
 
   function deleteSession(e: React.MouseEvent, id: string) {
     e.stopPropagation()
-    setSessions((prev) => {
-      const next = prev.filter((s) => s.id !== id)
-      try {
-        localStorage.setItem('chanakya_chat_sessions_v1', JSON.stringify(next))
-      } catch {
-        // ignore
-      }
-      return next
-    })
+    setSessions((prev) => prev.filter((s) => s.id !== id))
+    if (uid) deleteSessionRemote(uid, id).catch(() => {})
     if (currentSessionId === id) {
       startNewChat()
     }
@@ -515,7 +554,7 @@ function ChatContent() {
             </div>
           </div>
 
-          {/* Recent Consultations / Chat History (Stored locally) */}
+          {/* Recent Consultations / Chat History (synced to your account) */}
           <div className="mt-6 flex-1 overflow-y-auto">
             <div className="px-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
               Recent Consultations

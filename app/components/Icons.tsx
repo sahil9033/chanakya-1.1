@@ -187,6 +187,13 @@ export const IconSpark = (p: IconProps) => (
   </Base>
 )
 
+export const IconUser = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21a8 8 0 0 1 16 0" />
+  </Base>
+)
+
 export const IconLock = (p: IconProps) => (
   <Base {...p}>
     <rect x="5" y="10" width="14" height="10" rx="2.5" />

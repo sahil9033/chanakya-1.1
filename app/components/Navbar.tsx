@@ -12,6 +12,7 @@ import {
   IconGoogle,
   IconMenu,
   IconSignOut,
+  IconUser,
 } from './Icons'
 
 const NAV_LINKS = [
@@ -212,6 +213,16 @@ export default function Navbar() {
                       )}
                     </div>
                     <div className="my-1 h-px bg-ink-line" />
+                    <Link
+                      href="/account"
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-[13px] transition-colors hover:bg-cream hover:text-ink ${
+                        pathname === '/account' ? 'text-ink' : 'text-ink-soft'
+                      }`}
+                    >
+                      <IconUser width={15} height={15} />
+                      Account
+                    </Link>
                     <button
                       type="button"
                       onClick={() => {
@@ -280,22 +291,31 @@ export default function Navbar() {
 
             {!loading &&
               (user ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    signOut()
-                    setOpen(false)
-                  }}
-                  className="mt-1 flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-ink-soft transition-colors hover:bg-cream/70 hover:text-ink"
-                >
-                  <span className="flex min-w-0 items-center gap-2.5">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-medium text-canvas">
-                      {(user.displayName?.[0] ?? user.email?.[0] ?? 'C').toUpperCase()}
+                <>
+                  <Link
+                    href="/account"
+                    className="mt-2 flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-ink-soft transition-colors hover:bg-cream/70 hover:text-ink"
+                  >
+                    <span className="flex min-w-0 items-center gap-2.5">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[12px] font-medium text-canvas">
+                        {(user.displayName?.[0] ?? user.email?.[0] ?? 'C').toUpperCase()}
+                      </span>
+                      <span className="truncate">{user.displayName ?? user.email}</span>
                     </span>
-                    <span className="truncate">{user.displayName ?? user.email}</span>
-                  </span>
-                  <IconSignOut width={16} height={16} className="shrink-0" />
-                </button>
+                    <IconUser width={16} height={16} className="shrink-0" />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      signOut()
+                      setOpen(false)
+                    }}
+                    className="mt-1 flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-ink-soft transition-colors hover:bg-cream/70 hover:text-ink"
+                  >
+                    <span>Sign out</span>
+                    <IconSignOut width={16} height={16} className="shrink-0" />
+                  </button>
+                </>
               ) : (
                 <button
                   type="button"

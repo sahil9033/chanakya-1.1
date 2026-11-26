@@ -3,6 +3,7 @@
 // so they are safe to keep in source. Import `auth` anywhere on the client.
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app'
 import { getAuth, type Auth } from 'firebase/auth'
+import { getDatabase, type Database } from 'firebase/database'
 import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics'
 
 const firebaseConfig = {
@@ -20,6 +21,9 @@ const firebaseConfig = {
 export const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig)
 
 export const auth: Auth = getAuth(app)
+
+// Realtime Database — used for private per-user chat history and profile data.
+export const db: Database = getDatabase(app)
 
 let analyticsPromise: Promise<Analytics | null> | null = null
 

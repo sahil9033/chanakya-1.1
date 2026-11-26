@@ -17,6 +17,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { auth } from './firebase'
+import { syncProfile } from './chatStore'
 
 interface AuthContextValue {
   user: User | null
@@ -57,6 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (nextUser) => {
         setUser(nextUser)
         setLoading(false)
+        // Mirror basic account info into the Realtime Database (best effort).
+        if (nextUser) syncProfile(nextUser).catch(() => {})
       },
       (err) => {
         setError(toMessage(err))
