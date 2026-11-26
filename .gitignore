@@ -28,5 +28,5 @@ build/
 next-env.d.ts
 
 # Source audio (production copy lives in /public)
-"Vedhh AI Ambient Sitar.wav"
+Vedhh AI Ambient Sitar.wav
 Frame.svg
