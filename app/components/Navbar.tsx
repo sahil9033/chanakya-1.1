@@ -69,26 +69,49 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', onDown)
   }, [menuOpen])
 
-  // Page-wide pointer spotlight: one delegated listener, rAF-throttled, paint-only
+  // Page-wide pointer spotlight: one delegated listener, paint-only.
+  // The glow eases toward the pointer each frame so it drifts slowly
+  // instead of snapping to the cursor.
   useEffect(() => {
     let raf = 0
-    let target: HTMLElement | null = null
-    let px = 0
-    let py = 0
+    let active: HTMLElement | null = null
+    let curX = 0
+    let curY = 0
+    let tgtX = 0
+    let tgtY = 0
+
+    const paint = () => {
+      if (!active) return
+      active.style.setProperty('--mx', `${curX}px`)
+      active.style.setProperty('--my', `${curY}px`)
+    }
+
+    const tick = () => {
+      curX += (tgtX - curX) * 0.14
+      curY += (tgtY - curY) * 0.14
+      const settled = Math.abs(tgtX - curX) < 0.3 && Math.abs(tgtY - curY) < 0.3
+      if (settled) {
+        curX = tgtX
+        curY = tgtY
+      }
+      paint()
+      raf = settled ? 0 : requestAnimationFrame(tick)
+    }
 
     const onMove = (e: PointerEvent) => {
       const el = (e.target as HTMLElement | null)?.closest?.('.spot') as HTMLElement | null
-      target = el
-      px = e.clientX
-      py = e.clientY
-      if (!el || raf) return
-      raf = requestAnimationFrame(() => {
-        raf = 0
-        if (!target) return
-        const rect = target.getBoundingClientRect()
-        target.style.setProperty('--mx', `${px - rect.left}px`)
-        target.style.setProperty('--my', `${py - rect.top}px`)
-      })
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      tgtX = e.clientX - rect.left
+      tgtY = e.clientY - rect.top
+      if (el !== active) {
+        // Reseed on a new card so the glow doesn't sweep across from the last one.
+        active = el
+        curX = tgtX
+        curY = tgtY
+        paint()
+      }
+      if (!raf) raf = requestAnimationFrame(tick)
     }
 
     window.addEventListener('pointermove', onMove, { passive: true })

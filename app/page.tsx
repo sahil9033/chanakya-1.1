@@ -284,18 +284,20 @@ export default function HomePage() {
                   filter: 'blur(32px)',
                 }}
               />
-              {/* The flower logo — heavily blurred & low opacity so text stays readable */}
-              <span
-                className="block h-full w-full animate-logo-bloom"
-                style={{
-                  backgroundImage: 'url(/logo-flower.svg)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  backgroundSize: 'contain',
-                  filter: 'blur(14px)',
-                  opacity: 0.32,
-                }}
-              />
+              {/* The flower logo — slowly rotating, heavily blurred & low opacity so text stays readable */}
+              <span className="block h-full w-full animate-logo-spin">
+                <span
+                  className="block h-full w-full animate-logo-bloom"
+                  style={{
+                    backgroundImage: 'url(/logo-flower.svg)',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'contain',
+                    filter: 'blur(14px)',
+                    opacity: 0.32,
+                  }}
+                />
+              </span>
             </div>
           </div>
 

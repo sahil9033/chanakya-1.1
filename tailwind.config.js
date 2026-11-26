@@ -74,6 +74,7 @@ module.exports = {
           '100%': { transform: 'scale(2.2)', opacity: '0' },
         },
         'spin-slow': { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+        'logo-spin': { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
         'dot-bounce': {
           '0%,80%,100%': { transform: 'translate3d(0,0,0)', opacity: '0.35' },
           '40%': { transform: 'translate3d(0,-4px,0)', opacity: '1' },
@@ -111,6 +112,7 @@ module.exports = {
         sheen: 'sheen 7s linear infinite',
         'ring-pulse': 'ring-pulse 2.6s cubic-bezier(0.16,1,0.3,1) infinite',
         'spin-slow': 'spin-slow 28s linear infinite',
+        'logo-spin': 'logo-spin 90s linear infinite',
         'dot-bounce': 'dot-bounce 1.2s ease-in-out infinite',
         'aurora-breathe': 'aurora-breathe 14s ease-in-out infinite',
         'aurora-breathe-rev': 'aurora-breathe-rev 18s ease-in-out infinite',
