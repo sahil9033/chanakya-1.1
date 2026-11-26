@@ -268,24 +268,62 @@ export default function HomePage() {
           <span className="mesh-layer mesh-a" />
           <span className="mesh-layer mesh-b" />
           <span className="mesh-layer mesh-c" />
+          <span className="mesh-layer mesh-d" />
         </div>
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pt-24">
+        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-14 text-center sm:pt-20">
+          {/* Animated layered gradient emblem (Apple-style concentric pastel forms) */}
           <Reveal className="flex justify-center">
+            <div className="relative mb-8 flex h-40 w-40 items-center justify-center sm:h-48 sm:w-48">
+              {/* Outer layered rings */}
+              <span
+                className="absolute inset-0 rounded-full opacity-70 animate-aurora-breathe"
+                style={{
+                  background:
+                    'conic-gradient(from 0deg, rgba(253,186,116,0.5), rgba(251,113,133,0.45), rgba(167,139,250,0.45), rgba(94,234,212,0.45), rgba(253,186,116,0.5))',
+                  filter: 'blur(2px)',
+                }}
+                aria-hidden="true"
+              />
+              <span
+                className="absolute inset-4 rounded-full opacity-80 animate-aurora-breathe-rev"
+                style={{
+                  background:
+                    'conic-gradient(from 120deg, rgba(129,140,248,0.5), rgba(94,234,212,0.45), rgba(253,224,71,0.45), rgba(251,113,133,0.5), rgba(129,140,248,0.5))',
+                  filter: 'blur(1.5px)',
+                }}
+                aria-hidden="true"
+              />
+              <span
+                className="absolute inset-8 rounded-full opacity-90 animate-aurora-breathe"
+                style={{
+                  background:
+                    'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95), rgba(253,224,71,0.55) 40%, rgba(251,113,133,0.5) 70%, rgba(129,140,248,0.5) 100%)',
+                }}
+                aria-hidden="true"
+              />
+              {/* Core mark */}
+              <span className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 shadow-soft backdrop-blur-sm animate-float-slow sm:h-20 sm:w-20">
+                <span className="font-serif text-3xl font-bold text-accent-deep sm:text-4xl">चा</span>
+              </span>
+            </div>
+          </Reveal>
+
+          <Reveal className="flex justify-center" delay={60}>
             <span className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/70 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               Vedhh AI · Ask Chanakya
             </span>
           </Reveal>
 
-          <Reveal delay={80}>
+          <Reveal delay={120}>
             <h1 className="mt-7 text-balance font-serif text-5xl leading-[1.02] tracking-tightest text-ink sm:text-6xl lg:text-7xl">
               Strategic counsel,{' '}
               <em className="italic text-accent-deep">grounded</em> in the Arthashastra
             </h1>
           </Reveal>
 
-          <Reveal delay={150}>
+          <Reveal delay={180}>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
               Vedhh AI answers your hardest calls — negotiation, leadership, crisis and alliances —
               from Kautilya&apos;s Arthashastra and Chāṇakya Nīti. It also computes your precise
@@ -293,7 +331,7 @@ export default function HomePage() {
             </p>
           </Reveal>
 
-          <Reveal delay={220}>
+          <Reveal delay={240}>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/chat"
@@ -309,7 +347,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/astrology"
-                className="inline-flex items-center gap-2 rounded-full border border-ink-line px-6 py-3 text-sm font-medium text-ink transition-colors duration-300 hover:bg-cream"
+                className="inline-flex items-center gap-2 rounded-full border border-ink-line bg-canvas/60 px-6 py-3 text-sm font-medium text-ink backdrop-blur transition-all duration-300 hover:bg-cream hover:shadow-soft"
               >
                 <IconCompass width={16} height={16} className="text-accent" />
                 Generate your Kundali

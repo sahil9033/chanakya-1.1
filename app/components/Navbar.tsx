@@ -102,8 +102,10 @@ export default function Navbar() {
     <>
       {/* Sticky navigation */}
       <header
-        className={`sticky top-0 z-40 border-b transition-colors duration-300 ${
-          scrolled ? 'border-ink-line bg-canvas/80 backdrop-blur-xl' : 'border-transparent bg-canvas'
+        className={`sticky top-0 z-40 border-b transition-all duration-300 ${
+          scrolled
+            ? 'border-ink-line/60 bg-canvas/70 backdrop-blur-xl'
+            : 'border-transparent bg-canvas/40 backdrop-blur-md'
         }`}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">

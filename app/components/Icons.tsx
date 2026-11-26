@@ -292,6 +292,13 @@ export const IconMessageSquare = (p: IconProps) => (
   </Base>
 )
 
+export const IconSearch = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m21 21-4.3-4.3" />
+  </Base>
+)
+
 /* LinkedIn "in" mark — filled glyph */
 export function IconLinkedIn(props: IconProps) {
   return (

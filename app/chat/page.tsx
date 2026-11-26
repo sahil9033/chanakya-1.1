@@ -21,6 +21,7 @@ import {
   IconCopy,
   IconMessageSquare,
   IconPlus,
+  IconSearch,
   IconSend,
   IconSidebar,
   IconTrash,
@@ -224,6 +225,7 @@ function ChatContent() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [currentSessionId, setCurrentSessionId] = useState<string>('')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const endRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -444,6 +446,12 @@ function ChatContent() {
   const activeLensObj = currentLens(filter)
   const activeModelObj = currentModel(selectedModel)
 
+  const filteredSessions = searchQuery.trim()
+    ? sessions.filter((s) =>
+        s.title.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      )
+    : sessions
+
   return (
     <div className="flex h-[calc(100dvh-65px)] w-full overflow-hidden bg-canvas text-ink relative">
       {/* =========================================================================
@@ -458,17 +466,17 @@ function ChatContent() {
       )}
 
       {/* =========================================================================
-          CLAUDE-STYLE COLLAPSIBLE SIDEBAR (Drawer on mobile, side panel on desktop)
+          LEFT SIDEBAR — search + consultation history only
          ========================================================================= */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-ink-line bg-canvas shadow-2xl transition-transform duration-300 ease-in-out md:relative md:inset-auto md:z-20 md:shadow-none md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-ink-line bg-canvas shadow-2xl transition-transform duration-300 ease-expo md:relative md:inset-auto md:z-20 md:shadow-none md:translate-x-0 ${
           sidebarOpen
             ? 'translate-x-0 w-72 sm:w-80 md:w-64 lg:w-72 shrink-0'
-            : '-translate-x-full w-72 md:w-0 md:overflow-hidden md:border-none'
+            : '-translate-x-full md:w-0 md:overflow-hidden md:border-none'
         }`}
       >
         <div className="flex h-full flex-col p-3.5">
-          {/* Header Row: New Consultation CTA + Mobile Close Button */}
+          {/* Header Row: New Consultation CTA + Mobile Close */}
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -484,7 +492,6 @@ function ChatContent() {
               <span className="text-[10px] text-ink-faint hidden sm:inline">⌘K</span>
             </button>
 
-            {/* Mobile close button */}
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
@@ -496,98 +503,61 @@ function ChatContent() {
             </button>
           </div>
 
-          {/* Treatise Strategy Lenses Selection */}
-          <div className="mt-5">
-            <div className="px-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-              Treatise Lens
-            </div>
-            <div className="mt-2 space-y-1">
-              {TREATISE_LENSES.map((tab) => {
-                const active = filter === tab.id
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => {
-                      setFilter(tab.id)
-                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
-                        setSidebarOpen(false)
-                      }
-                    }}
-                    className={`flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-left text-xs transition-colors ${
-                      active
-                        ? 'bg-ink text-canvas font-medium shadow-xs'
-                        : 'text-ink-soft hover:bg-cream/80 hover:text-ink'
-                    }`}
-                  >
-                    <span className="truncate">{tab.label}</span>
-                    {active && <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />}
-                  </button>
-                )
-              })}
+          {/* Search history */}
+          <div className="mt-4">
+            <div className="group flex items-center gap-2 rounded-xl border border-ink-line bg-cream/60 px-3 py-2 transition-colors focus-within:border-accent/40 focus-within:bg-cream">
+              <IconSearch width={14} height={14} className="shrink-0 text-ink-faint" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search consultations…"
+                className="min-w-0 flex-1 bg-transparent text-xs text-ink placeholder:text-ink-faint focus:outline-none"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                  className="shrink-0 text-ink-faint hover:text-ink"
+                >
+                  <IconClose width={12} height={12} />
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Model Selection */}
-          <div className="mt-5">
+          {/* Recent Consultations / Chat History */}
+          <div className="mt-4 flex-1 overflow-y-auto">
             <div className="px-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-              Engine Model
+              {searchQuery ? `Results (${filteredSessions.length})` : 'Recent Consultations'}
             </div>
             <div className="mt-2 space-y-1">
-              {AI_MODELS.map((m) => {
-                const active = selectedModel === m.id
-                return (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedModel(m.id)
-                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
-                        setSidebarOpen(false)
-                      }
-                    }}
-                    className={`flex w-full items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-left transition-colors ${
-                      active
-                        ? 'bg-cream text-ink border border-ink-line/70'
-                        : 'text-ink-soft hover:bg-cream/70 hover:text-ink'
-                    }`}
-                  >
-                    <span className="min-w-0">
-                      <span className="block text-xs font-medium">{m.name}</span>
-                      <span className="block truncate text-[10px] text-ink-faint">{m.desc}</span>
-                    </span>
-                    {active && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Recent Consultations / Chat History (synced to your account) */}
-          <div className="mt-6 flex-1 overflow-y-auto">
-            <div className="px-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-              Recent Consultations
-            </div>
-            <div className="mt-2 space-y-1">
-              {sessions.length === 0 ? (
+              {filteredSessions.length === 0 ? (
                 <div className="px-2 py-3 text-left text-xs text-ink-faint italic">
-                  No previous sessions yet. Ask your first counsel above.
+                  {searchQuery
+                    ? 'No consultations match your search.'
+                    : 'No previous sessions yet. Ask your first counsel above.'}
                 </div>
               ) : (
-                sessions.map((s) => {
+                filteredSessions.map((s) => {
                   const isActive = currentSessionId === s.id
                   return (
                     <div
                       key={s.id}
                       onClick={() => loadSession(s)}
-                      className={`group flex cursor-pointer items-center justify-between rounded-xl px-2.5 py-2 text-left text-xs transition-colors ${
+                      className={`group flex cursor-pointer items-center justify-between rounded-xl px-2.5 py-2 text-left text-xs transition-all duration-200 ${
                         isActive
-                          ? 'bg-cream text-ink font-medium border border-ink-line/70'
-                          : 'text-ink-soft hover:bg-cream/60 hover:text-ink'
+                          ? 'bg-accent-tint text-ink font-medium border border-accent/20'
+                          : 'text-ink-soft hover:bg-cream/70 hover:text-ink'
                       }`}
                     >
                       <span className="flex items-center gap-2 truncate">
-                        <IconMessageSquare width={13} height={13} className="shrink-0 text-ink-faint" />
+                        <IconMessageSquare
+                          width={13}
+                          height={13}
+                          className={`shrink-0 ${isActive ? 'text-accent-deep' : 'text-ink-faint'}`}
+                        />
                         <span className="truncate">{s.title}</span>
                       </span>
                       <button
@@ -624,41 +594,31 @@ function ChatContent() {
          ========================================================================= */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-canvas w-full">
         {/* Top Header Bar inside Chat View */}
-        <div className="flex h-12 shrink-0 items-center justify-between border-b border-ink-line bg-canvas/85 px-3 sm:px-4 backdrop-blur-md">
-          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-            {/* Sidebar toggle button (Claude style) */}
+        <div className="flex h-12 shrink-0 items-center justify-between border-b border-ink-line/70 bg-canvas/70 px-3 sm:px-4 backdrop-blur-xl">
+          <div className="flex items-center gap-2 min-w-0">
             <button
               type="button"
               onClick={() => setSidebarOpen((v) => !v)}
               aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
               aria-expanded={sidebarOpen}
-              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line bg-canvas text-ink-soft hover:text-ink hover:border-accent/40 transition-colors"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line bg-canvas/60 text-ink-soft hover:text-ink hover:border-accent/40 transition-colors"
               title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
             >
               <IconSidebar width={16} height={16} />
             </button>
-
-            {/* Active Mode & Model Badges */}
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-cream px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-medium text-ink max-w-[140px] sm:max-w-none truncate">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
-                <span className="truncate">{activeLensObj.label}</span>
-              </span>
-              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-ink-line/70 bg-canvas px-2.5 py-1 text-[11px] text-ink-soft">
-                <IconBolt width={11} height={11} className="text-accent" />
-                {activeModelObj.name}
-              </span>
-            </div>
+            <span className="hidden items-center gap-1.5 rounded-full border border-ink-line/70 bg-canvas/60 px-2.5 py-1 text-[11px] text-ink-soft sm:inline-flex">
+              <IconBolt width={11} height={11} className="text-accent" />
+              {activeModelObj.name}
+            </span>
           </div>
 
-          {/* Quick Actions */}
           <div className="flex items-center gap-2 shrink-0">
             {hasMessages && (
               <button
                 type="button"
                 onClick={startNewChat}
                 aria-label="Start a new consultation"
-                className="inline-flex items-center gap-1 rounded-full border border-ink-line bg-canvas px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs text-ink-soft hover:text-ink hover:border-accent/30 transition-colors"
+                className="inline-flex items-center gap-1 rounded-full border border-ink-line bg-canvas/60 px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs text-ink-soft hover:text-ink hover:border-accent/30 transition-colors"
               >
                 <IconPlus width={12} height={12} />
                 <span className="hidden sm:inline">New</span>
@@ -848,7 +808,7 @@ function ChatContent() {
            ========================================================================= */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-canvas via-canvas/95 to-transparent p-2.5 sm:p-4 pb-2.5 sm:pb-6 pt-5 sm:pt-10">
           <div className="pointer-events-auto mx-auto w-full max-w-3xl">
-            <div className="rounded-2xl sm:rounded-3xl border border-ink-line bg-canvas/95 p-1.5 sm:p-2.5 shadow-soft backdrop-blur-xl transition-all duration-300 focus-within:border-accent/45 focus-within:shadow-glow">
+            <div className="rounded-2xl sm:rounded-3xl border border-ink-line bg-canvas/80 p-1.5 sm:p-2.5 shadow-soft backdrop-blur-xl transition-all duration-300 focus-within:border-accent/45 focus-within:shadow-glow">
               <div className="flex items-end gap-1.5 sm:gap-2 px-1">
                 <textarea
                   ref={textareaRef}
@@ -885,7 +845,7 @@ function ChatContent() {
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                       aria-label="Treatise lens"
-                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[130px] sm:max-w-none truncate"
+                      className="cursor-pointer appearance-none rounded-full border border-ink-line bg-canvas/60 pl-2.5 sm:pl-3 pr-6 sm:pr-7 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium text-ink-soft hover:text-ink hover:border-accent/40 transition-colors focus:outline-none max-w-[130px] sm:max-w-none truncate"
                     >
                       {TREATISE_LENSES.map((t) => (
                         <option key={t.id} value={t.id}>
@@ -904,7 +864,7 @@ function ChatContent() {
                   <div
                     role="group"
                     aria-label="Engine model"
-                    className="flex shrink-0 items-center gap-0.5 rounded-full border border-ink-line bg-cream/80 p-0.5"
+                    className="flex shrink-0 items-center gap-0.5 rounded-full border border-ink-line bg-cream/60 p-0.5"
                   >
                     {AI_MODELS.map((m) => {
                       const active = selectedModel === m.id
@@ -917,7 +877,7 @@ function ChatContent() {
                           title={m.desc}
                           className={`rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium transition-all duration-200 ${
                             active
-                              ? 'bg-canvas text-ink shadow-xs'
+                              ? 'bg-accent text-white shadow-xs'
                               : 'text-ink-soft hover:text-ink'
                           }`}
                         >
