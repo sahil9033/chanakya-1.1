@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
 import Footer from '../components/Footer'
 import SignInGate from '../components/SignInGate'
 import Reveal from '../components/Reveal'
@@ -35,6 +36,44 @@ const GRID_HOUSES = [
   [10, 0, 0, 5],
   [9, 8, 7, 6],
 ]
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.app'
+).replace(/\/$/, '')
+
+// Crawlable FAQ — kept outside the sign-in gate so it is always server-rendered.
+const FAQ_ITEMS = [
+  {
+    q: 'Is the Vedhh AI Kundali free?',
+    a: 'Yes. Calculating your sidereal Vedic birth chart — Lagna, planetary positions, nakshatra, Vimshottari dasha and transits — is free. You only need an account to view the interpretation.',
+  },
+  {
+    q: 'Which ayanamsa does Vedhh AI use?',
+    a: 'Vedhh AI uses the Lahiri (Chitrapaksha) ayanamsa, the sidereal standard adopted in India in 1955. That is why the degrees in your chart can be checked against a printed ephemeris or panchang.',
+  },
+  {
+    q: 'What details do I need to calculate a Kundali?',
+    a: 'Your date of birth, your exact time of birth and your birthplace. The time of birth matters most, because it fixes the Lagna and the house positions — a few minutes can change the whole chart.',
+  },
+  {
+    q: 'Why is my Vedic sign different from my Western sun sign?',
+    a: 'Because Vedic astrology is sidereal and Western astrology is usually tropical. The two systems are offset by the ayanamsa, about 24 degrees — close to a full sign — so the Sun or Moon often falls in the neighbouring sign.',
+  },
+  {
+    q: 'What is Vimshottari dasha?',
+    a: 'It is Vedic astrology\u2019s timing system: a 120-year cycle of nine planetary periods. The lord of the nakshatra your Moon occupied at birth begins your first mahadasha, and each period is read as a layer on top of the chart.',
+  },
+]
+
+const FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
 
 interface PlaceResult {
   id: string
@@ -386,6 +425,10 @@ export default function KundaliPage() {
 
   return (
     <div className="relative flex flex-1 flex-col bg-canvas text-ink">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
+      />
       <SignInGate>
         <main className="flex-1">
           {/* Header */}
@@ -753,6 +796,62 @@ export default function KundaliPage() {
           </div>
         </main>
       </SignInGate>
+
+      {/* Crawlable FAQ — always rendered, even before sign-in */}
+      <section className="border-t border-ink-line bg-cream">
+        <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6">
+          <Reveal>
+            <h2 className="font-serif text-3xl leading-tight tracking-tight text-ink sm:text-4xl">
+              Kundali AI — frequently asked questions
+            </h2>
+            <p className="mt-4 text-pretty text-[15px] leading-relaxed text-ink-soft">
+              Vedhh AI calculates a precise sidereal (Lahiri ayanamsa) Vedic birth chart from your
+              exact birth details, then interprets only the calculated chart — never a generic
+              horoscope. A few common questions, answered plainly.
+            </p>
+          </Reveal>
+
+          <dl className="mt-8 space-y-6">
+            {FAQ_ITEMS.map((f, i) => (
+              <Reveal key={i} delay={(i % 3) * 60}>
+                <div className="rounded-2xl border border-ink-line bg-canvas p-5 sm:p-6">
+                  <dt className="text-[15px] font-semibold text-ink">{f.q}</dt>
+                  <dd className="mt-2 text-pretty text-[15px] leading-relaxed text-ink-soft">
+                    {f.a}
+                  </dd>
+                </div>
+              </Reveal>
+            ))}
+          </dl>
+
+          <Reveal className="mt-8">
+            <p className="text-[14px] leading-relaxed text-ink-soft">
+              Want the theory first? Read{' '}
+              <Link
+                href="/learn/lahiri-ayanamsa"
+                className="font-medium text-accent-deep underline-offset-4 hover:underline"
+              >
+                what the Lahiri ayanamsa is
+              </Link>{' '}
+              and{' '}
+              <Link
+                href="/learn/vimshottari-dasha"
+                className="font-medium text-accent-deep underline-offset-4 hover:underline"
+              >
+                how Vimshottari dasha works
+              </Link>
+              , or the full guide on{' '}
+              <Link
+                href="/learn/read-your-kundali"
+                className="font-medium text-accent-deep underline-offset-4 hover:underline"
+              >
+                how to read your Kundali
+              </Link>
+              .
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       <Footer />
     </div>

@@ -19,6 +19,7 @@ const NAV_LINKS = [
   { name: 'Overview', href: '/' },
   { name: 'Ask Chanakya', href: '/chat' },
   { name: 'Nadi Astrology', href: '/astrology' },
+  { name: 'Learn', href: '/learn' },
   { name: 'About', href: '/about' },
 ]
 
@@ -137,7 +138,7 @@ export default function Navbar() {
             <span className="block transition-transform duration-500 ease-expo group-hover:scale-105 group-hover:-rotate-3">
               <img
                 src="/logo.svg"
-                alt="Vedhh AI"
+                alt="Vedhh AI logo"
                 width={34}
                 height={34}
                 className="h-9 w-9 rounded-2xl"

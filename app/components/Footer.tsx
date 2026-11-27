@@ -5,10 +5,10 @@ const COLUMNS = [
   {
     heading: 'Knowledge',
     links: [
-      { label: 'The 4 Upāyas', href: '/chat?filter=arthashastra' },
-      { label: 'Saptāṅga Pillars', href: '/about' },
-      { label: 'Mandala Geopolitics', href: '/chat?filter=arthashastra' },
-      { label: 'Upanishadic Viveka', href: '/about' },
+      { label: 'The Four Upāyas', href: '/learn/sama-dama-bheda-danda' },
+      { label: 'Chanakya Niti for Negotiation', href: '/learn/chanakya-niti-negotiation' },
+      { label: 'Chanakya on Leadership', href: '/learn/chanakya-leadership-quotes' },
+      { label: 'How to Read a Kundali', href: '/learn/read-your-kundali' },
     ],
   },
   {
@@ -16,8 +16,8 @@ const COLUMNS = [
     links: [
       { label: 'Ask Chanakya', href: '/chat' },
       { label: 'Kundali AI', href: '/astrology' },
-      { label: 'Realpolitik Mode', href: '/chat?filter=arthashastra' },
-      { label: 'Discernment Mode', href: '/chat?filter=upanishad' },
+      { label: 'Learn Guides', href: '/learn' },
+      { label: 'Lahiri Ayanamsa', href: '/learn/lahiri-ayanamsa' },
       { label: 'NVIDIA NIM', href: 'https://build.nvidia.com', external: true },
     ],
   },
@@ -48,7 +48,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-2.5">
               <img
                 src="/logo.svg"
-                alt="Vedhh AI"
+                alt="Vedhh AI logo"
                 width={36}
                 height={36}
                 className="h-9 w-9 rounded-2xl"

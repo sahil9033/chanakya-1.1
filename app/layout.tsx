@@ -56,7 +56,7 @@ export const metadata: Metadata = {
       'Ask Chanakya for Arthashastra-grounded strategic counsel, and calculate a precise sidereal Vedic Kundali. Strategy first, deterministic astronomy, grounded interpretation.',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Vedhh AI — Strategic Counsel & Vedic Astrology',
     description:
       'Ask Chanakya for strategic counsel, and calculate a precise sidereal Vedic Kundali.',

@@ -13,6 +13,13 @@ import {
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vedhh-ai.vercel.app'
 
+const OG_IMAGE = {
+  url: '/opengraph-image',
+  width: 1200,
+  height: 630,
+  alt: 'Vedhh AI — Arthashastra-grounded strategy and precise Vedic Kundali',
+}
+
 export const metadata: Metadata = {
   title: 'About — Sahil Dadaso Patil & Vedhh AI',
   description:
@@ -23,6 +30,14 @@ export const metadata: Metadata = {
     title: 'About — Sahil Dadaso Patil & Vedhh AI',
     description:
       'Vedhh AI is a strategic-intelligence engine and a Vedic astrology (Kundali) AI founded by Sahil Dadaso Patil.',
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About — Sahil Dadaso Patil & Vedhh AI',
+    description:
+      'Vedhh AI is a strategic-intelligence engine and a Vedic astrology (Kundali) AI founded by Sahil Dadaso Patil.',
+    images: [OG_IMAGE.url],
   },
 }
 
